@@ -66,6 +66,13 @@ public void actualizarAerolinea() {
         System.out.println("No se encontró ninguna aerolínea con el ID proporcionado.");
     }
 }
+public void eliminarAerolinea() {
+    System.out.println("--- Menú Eliminar Aerolinea ---");
+    System.out.println("Ingrese el ID de la aerolínea que desea eliminar:");
+    Long id = Long.parseLong(scanner.nextLine());
+    aerolineaUseCase.eliminarAerolinea(id);
+    System.out.println("Aerolínea eliminada con éxito.");
+}
 
 
 

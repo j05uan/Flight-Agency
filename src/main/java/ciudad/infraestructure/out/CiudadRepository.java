@@ -1,10 +1,15 @@
 package ciudad.infraestructure.out;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import ciudad.Domain.Entity.Ciudad;
 import ciudad.Domain.Services.CiudadServices;
+import resource.ConfiguracionBaseDeDatos;
 
 public class CiudadRepository implements CiudadServices {
     
@@ -43,6 +48,24 @@ public class CiudadRepository implements CiudadServices {
 
     @Override
     public List<Ciudad> obtenerTodasLasCiudades() {
-        return new ArrayList<>(ciudades);
+        List<Ciudad> ciudades = new ArrayList<>();
+        String sql = "SELECT * FROM ciudades";
+    
+        try (Connection connection = ConfiguracionBaseDeDatos.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+    
+            while (resultSet.next()) {
+                Ciudad ciudad = new Ciudad();
+                ciudad.setId(resultSet.getLong("id"));
+                ciudad.setNombre(resultSet.getString("nombre"));  // Asegúrate de que el nombre de la columna es "nombre" y no "Nombre"
+                ciudades.add(ciudad);  // Agregar ciudad a la lista
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return ciudades;  // Devolver la lista después de cerrar los recursos
     }
+    
 }

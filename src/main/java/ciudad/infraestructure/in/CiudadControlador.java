@@ -102,9 +102,9 @@ public class CiudadControlador {
         System.out.println("Ciudad creada con éxito.");
     }
 
-    private void obtenerTodasLasCiudades() {
+    private  void obtenerTodasLasCiudades() {
         System.out.println("--- Menú Obtener Todas las Ciudades ---");
-        var ciudades = ciudadUseCase.obtenerTodasLasCiudades();
+        List<Ciudad> ciudades = ciudadUseCase.obtenerTodasLasCiudades();
         if (ciudades.isEmpty()) {
             System.out.println("No hay ciudades disponibles.");
         } else {

@@ -7,6 +7,7 @@ import aeropuerto.application.ActualizarAeropuerto;
 import aeropuerto.application.AeropueroUseCase;
 import aeropuerto.application.EliminarAeropuertoUseCase;
 import aeropuerto.application.EncontrarAeropuertoUseCase;
+import aeropuerto.domain.entity.Aeropuerto;
 import ciudad.Domain.Entity.Ciudad;
 import ciudad.infraestructure.out.CiudadRepository;
 
@@ -16,6 +17,7 @@ public class AeropuertoControlador {
     private ActualizarAeropuerto actualizarAeropuerto;
     private EncontrarAeropuertoUseCase encontrarAeropuertoUseCase;
     private EliminarAeropuertoUseCase eliminarAeropuertoUseCase;
+    private CiudadRepository ciudadRepository = new CiudadRepository();
 
     private Scanner scanner;
 
@@ -25,6 +27,7 @@ public class AeropuertoControlador {
         this.eliminarAeropuertoUseCase = eliminarAeropuertoUseCase;
         this.encontrarAeropuertoUseCase = encontrarAeropuertoUseCase;
         this.scanner = new Scanner(System.in);
+        this.ciudadRepository = ciudadRepository;
     }
 
     public void start() {
@@ -76,13 +79,38 @@ public class AeropuertoControlador {
         System.out.println("--- Menú Crear Aeropuerto ---");
         System.out.println("Ingrese el nombre del aeropuerto:");
         String nombre = scanner.nextLine();
-        List<Ciudad> ciudad = CiudadRepository.obtenerTodasLasCiudades();
-        
 
-        
-        
+        // Obtener la lista de ciudades disponibles
+        List<Ciudad> ciudades = ciudadRepository.obtenerTodasLasCiudades();
+
+        // Mostrar las ciudades disponibles para que el usuario elija
+        System.out.println("Seleccione la ciudad para el aeropuerto:");
+        for (Ciudad ciudad : ciudades) {
+            System.out.println(ciudad.getId() + " | " + ciudad.getNombre());
+        }
+
+        System.out.println("Ingrese el ID de la ciudad:");
+        Long ciudadId = Long.parseLong(scanner.nextLine());
+
+        // Buscar la ciudad seleccionada por el usuario
+        Ciudad ciudadSeleccionada = ciudades.stream()
+            .filter(ciudad -> ciudad.getId().equals(ciudadId))
+            .findFirst()
+            .orElse(null);
+
+        if (ciudadSeleccionada == null) {
+            System.out.println("Ciudad no encontrada.");
+            return;
+        }
+
+        // Crear el aeropuerto
+        Aeropuerto aeropuerto = new Aeropuerto();
+        aeropuerto.setNombre(nombre);
+        aeropuerto.setCiudad(ciudadSeleccionada);
+        aeropueroUseCase.crearAeropuerto(aeropuerto);
         System.out.println("Aeropuerto creado con éxito.");
     }
+
 
     private void actualizarAeropuerto() {
         System.out.println("--- Menú Actualizar Aeropuerto ---");
