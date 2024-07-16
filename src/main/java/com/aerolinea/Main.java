@@ -8,6 +8,7 @@ import aerolinea.Infraestructure.in.AerolineaControlador;
 import aerolinea.Infraestructure.out.AerolineaRepository;
 import aerolinea.application.AerolineaUseCase;
 import resource.ConfiguracionBaseDeDatos;
+import static utils.Consola.cleanScreen;
 
 public class Main {
     public static void main(String[] args) {
@@ -46,15 +47,19 @@ public class Main {
 
                 switch (opcion) {
                     case 1:
+                        cleanScreen();
                         mostrarMenuAeropuertos(scanner, consolaAdaptador);
                         break;
                     case 2:
+                        cleanScreen();
                         mostrarMenuEntidades(scanner);
                         break;
                     case 3:
+                        cleanScreen();
                         mostrarMenuReservas(scanner);
                         break;
                     case 4:
+                        cleanScreen();
                         salir = true;
                         System.out.println("Saliendo del sistema...");
                         break;
@@ -86,15 +91,19 @@ public class Main {
 
                 switch (seleccion) {
                     case 1:
+                        cleanScreen();
                         mostrarMenuAerolinea(scanner, consolaAdaptador);
                         break;
                     case 2:
+                        cleanScreen();
                         mostrarMenuLocalidad(scanner);
                         break;
                     case 3:
+                        cleanScreen();
                         // Implementar el menú de Salidas Aeropuerto
                         break;
                     case 4:
+                        cleanScreen();
                         salirMenuAeropuertos = true;
                         break;
                     default:
@@ -125,18 +134,23 @@ public class Main {
 
                 switch (seleccionAereolinea) {
                     case 1:
+                        cleanScreen();
                         consolaAdaptador.crearAerolinea();
                         break;
                     case 2:
+                        cleanScreen();
                         consolaAdaptador.listarAerolineas();
                         break;
                     case 3:
+                        cleanScreen();
                         consolaAdaptador.actualizarAerolinea();
                         break;
                     case 4:
+                        cleanScreen();
                         consolaAdaptador.eliminarAerolinea();
                         break;
                     case 5:
+                        cleanScreen();
                         salirMenuAerolinea = true;
                         break;
                     default:
@@ -165,12 +179,15 @@ public class Main {
 
                 switch (seleccionLocalidad) {
                     case 1:
+                        cleanScreen();
                         mostrarMenuPais(scanner);
                         break;
                     case 2:
+                        cleanScreen();
                         mostrarMenuCiudad(scanner);
                         break;
                     case 3:
+                        cleanScreen();
                         salirMenuLocalidad = true;
                         break;
                     default:
@@ -200,18 +217,24 @@ public class Main {
 
                 switch (seleccionPais) {
                     case 1:
+                        cleanScreen();
+
                         // Implementar método para crear Pais
                         break;
                     case 2:
+                        cleanScreen();
                         // Implementar método para listar Ciudades
                         break;
                     case 3:
+                        cleanScreen();
                         // Implementar método para actualizar Ciudad
                         break;
                     case 4:
+                        cleanScreen();
                         // Implementar método para eliminar Ciudad
                         break;
                     case 5:
+                        cleanScreen();
                         salirMenuPais = true;
                         break;
                     default:
@@ -242,18 +265,23 @@ public class Main {
 
                 switch (seleccionCiudad) {
                     case 1:
+                        cleanScreen();
                         // Implementar método para crear Ciudad
                         break;
                     case 2:
+                        cleanScreen();
                         // Implementar método para listar Ciudades
                         break;
                     case 3:
+                        cleanScreen();
                         // Implementar método para actualizar Ciudad
                         break;
                     case 4:
+                        cleanScreen();
                         // Implementar método para eliminar Ciudad
                         break;
                     case 5:
+                        cleanScreen();
                         salirMenuCiudad = true;
                         break;
                     default:
