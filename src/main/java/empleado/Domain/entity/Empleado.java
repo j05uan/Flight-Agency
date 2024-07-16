@@ -75,6 +75,16 @@ public class Empleado {
         this.tripulaciones = tripulaciones;
     }
 
+    public String toString() {
+        return "Empleado{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", fechaIngreso=" + fechaIngreso +
+                ", aerolinea=" + aerolinea +
+                ", tipoEmpleado=" + tipoEmpleado +
+                ", tripulaciones=" + tripulaciones +
+                '}';
+    }
     
 
 }
