@@ -1,5 +1,7 @@
 package aeropuerto.application;
 
+import java.util.List;
+
 import aeropuerto.domain.entity.Aeropuerto;
 import aeropuerto.domain.services.AeropuertoServices;
 
@@ -16,5 +18,13 @@ public class AeropueroUseCase {
     
     public void executed(Aeropuerto aeropuerto){
         aeropuertoServices.crearAeropuerto(aeropuerto);
+    }   
+
+    public List<Aeropuerto> obtenerTodosLosAeropuertos(){
+        return aeropuertoServices.obtenerTodosLosAeropuertos();
+    }
+
+    public Aeropuerto obtenerAeropuertoPorId( Long id){
+        return aeropuertoServices.obtenerAeropuertoPorId(id);
     }
 }

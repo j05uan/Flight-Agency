@@ -31,4 +31,5 @@ public class CiudadUseCase {
     public void eliminarCiudad(Long id) {
         ciudadServices.eliminarCiudad(id);
     }
+    
 }

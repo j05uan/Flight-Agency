@@ -7,6 +7,9 @@ import aerolinea.Domain.Services.AerolineaServices;
 import aerolinea.Infraestructure.in.AerolineaControlador;
 import aerolinea.Infraestructure.out.AerolineaRepository;
 import aerolinea.application.AerolineaUseCase;
+import ciudad.Application.CiudadUseCase;
+import ciudad.Domain.Services.CiudadServices;
+import ciudad.infraestructure.in.CiudadControlador;
 import resource.ConfiguracionBaseDeDatos;
 import static utils.Consola.cleanScreen;
 
@@ -20,6 +23,9 @@ public class Main {
             AerolineaServices aerolineaServices = new AerolineaRepository();
             AerolineaUseCase aerolineaUseCase = new AerolineaUseCase(aerolineaServices);
             AerolineaControlador consolaAdaptador = new AerolineaControlador(aerolineaUseCase);
+            CiudadServices ciudadServices = new CiudadServices();
+            CiudadUseCase ciudadUseCase = new CiudadUseCase(ciudadServices);
+            CiudadControlador ciudadControlador = new  CiudadControlador(ciudadUseCase);
             
             // Llama al método de inicio para mostrar el menú
             inicio(consolaAdaptador);
@@ -219,7 +225,6 @@ public class Main {
                     case 1:
                         cleanScreen();
 
-                        // Implementar método para crear Pais
                         break;
                     case 2:
                         cleanScreen();

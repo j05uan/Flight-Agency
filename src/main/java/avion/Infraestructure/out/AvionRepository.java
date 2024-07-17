@@ -121,7 +121,6 @@ public class AvionRepository implements AvionServices {
             statement.setDate(3, new Date(avion.getFechaFabricacion().getTime()));
             statement.setLong(4, avion.getAerolinea().getId());  
             statement.setLong(5, avion.getModelo().getId());  
-            statement.setLong(6, avion.getId());
 
             statement.executeUpdate();
 
