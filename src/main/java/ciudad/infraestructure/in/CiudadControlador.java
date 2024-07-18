@@ -9,14 +9,14 @@ import pais.Application.PaisUseCase;
 import pais.Domain.Entity.Pais;
 
 public class CiudadControlador {
-     private final CiudadUseCase ciudadUseCase;
+    private final CiudadUseCase ciudadUseCase;
     private final PaisUseCase paisUseCase;
     private final Scanner scanner;
 
-    public CiudadControlador(CiudadUseCase ciudadUseCase, PaisUseCase paisUseCase) {
+    public CiudadControlador(CiudadUseCase ciudadUseCase, PaisUseCase paisUseCase, Scanner scanner) {
         this.ciudadUseCase = ciudadUseCase;
         this.paisUseCase = paisUseCase;
-        this.scanner = new Scanner(System.in);
+        this.scanner = scanner;
     }
 
     public void start() {
@@ -96,13 +96,19 @@ public class CiudadControlador {
         }
 
         Pais paisSeleccionado = paises.get(paisIndex);
-        Long id = (long) (ciudadUseCase.obtenerTodasLasCiudades().size() + 1);  // Simple ID generator, no recomendado en producción
+
+        // Generar ID de manera adecuada
+        Long id = ciudadUseCase.obtenerTodasLasCiudades().stream()
+                .map(Ciudad::getId)
+                .max(Long::compareTo)
+                .orElse(0L) + 1;
+
         Ciudad ciudad = new Ciudad();
         ciudadUseCase.crearCiudad(ciudad);
         System.out.println("Ciudad creada con éxito.");
     }
 
-    private  void obtenerTodasLasCiudades() {
+    private void obtenerTodasLasCiudades() {
         System.out.println("--- Menú Obtener Todas las Ciudades ---");
         List<Ciudad> ciudades = ciudadUseCase.obtenerTodasLasCiudades();
         if (ciudades.isEmpty()) {
@@ -173,4 +179,3 @@ public class CiudadControlador {
         }
     }
 }
-

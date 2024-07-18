@@ -9,6 +9,7 @@ import aeropuerto.application.EliminarAeropuertoUseCase;
 import aeropuerto.domain.entity.Aeropuerto;
 import ciudad.Domain.Entity.Ciudad;
 import ciudad.infraestructure.out.CiudadRepository;
+import static utils.Consola.cleanScreen;
 
 public class AeropuertoControlador {
 
@@ -40,12 +41,15 @@ public class AeropuertoControlador {
 
                 switch (opcion) {
                     case 1:
+                        cleanScreen();
                         crearAeropuerto();
                         break;
                     case 2:
+                        cleanScreen();
                         actualizarAeropuerto();
                         break;
                     case 3:
+                        cleanScreen();
                         eliminarAeropuerto();
                         break;
                     case 4:
