@@ -23,6 +23,10 @@ import ciudad.Application.CiudadUseCase;
 import ciudad.Domain.Services.CiudadServices;
 import ciudad.infraestructure.in.CiudadControlador;
 import ciudad.infraestructure.out.CiudadRepository;
+import cliente.Application.ClienteUseCase;
+import cliente.Domain.services.ClienteServices;
+import cliente.infraestructure.in.ClienteControlador;
+import cliente.infraestructure.out.ClienteRepository;
 import empleado.Application.EmpleadoUseCase;
 import empleado.Domain.services.EmpleadoServices;
 import empleado.infraestructure.in.EmpleadoControlador;
@@ -52,6 +56,10 @@ import rolTripulante.Application.RolTripulnteUseCase;
 import rolTripulante.Domain.services.RolTripulanteServices;
 import rolTripulante.infraestructure.in.RolTripulanteControlador;
 import rolTripulante.infraestructure.out.RolTripulanteRepository;
+import tipoDocumento.Applicacion.TipoDocumentoUseCase;
+import tipoDocumento.Domain.services.TipoDocumentoServices;
+import tipoDocumento.infraestructure.in.TipoDocumentoControlador;
+import tipoDocumento.infraestructure.out.TipoDocumentoRepository;
 import tipoEmpleado.Application.TipoEmpleadoUseCase;
 import tipoEmpleado.Domain.services.TipoEmpleadoServices;
 import tipoEmpleado.infraestructure.in.TipoEmpleadoControlador;
@@ -127,12 +135,21 @@ public class Main {
             RolTripulnteUseCase rolTripulnteUseCase = new RolTripulnteUseCase(rolTripulanteServices);
             RolTripulanteControlador rolTripulanteControlador = new RolTripulanteControlador(rolTripulnteUseCase, null);
 
+            //Cliente
+            ClienteServices clienteServices = new ClienteRepository();
+            ClienteUseCase clienteUseCase = new ClienteUseCase(clienteServices);
+            ClienteControlador clienteControlador = new ClienteControlador(null, clienteUseCase, null);
+
+            //Tipo Documento
+            TipoDocumentoServices tDocumentoServices = new TipoDocumentoRepository();
+            TipoDocumentoUseCase tipoDocumentoUseCase = new TipoDocumentoUseCase(tDocumentoServices);
+            TipoDocumentoControlador tipoDocumentoControlador = new TipoDocumentoControlador(tipoDocumentoUseCase);
 
 
             // Llama al método de inicio para mostrar el menú
 
             inicio(aerolineaControlador, ciudadControlador,aeropuertoControlador, paisControlador, asientoControlador, tipoEmpleadoControlador, empleadoControlador, fabricanteControlador, modeloControlador,
-            avioncControlador, estadoAvionControlador, historialEstadoControlador,rolTripulanteControlador);
+            avioncControlador, estadoAvionControlador, historialEstadoControlador,rolTripulanteControlador,clienteControlador, tipoDocumentoControlador);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -142,7 +159,7 @@ public class Main {
 
 
     private static void inicio(AerolineaControlador aerolineaControlador, CiudadControlador ciudadControlador,AeropuertoControlador aeropuertoControlador, PaisControlador paisControlador, AsientoControlador asientoControlador, TipoEmpleadoControlador tipoEmpleadoControlador, EmpleadoControlador empleadoControlador, FabricanteControlador fabricanteControlador,
-        ModeloControlador modeloControlador, AvionControlador avioncControlador, EstadoAvionControlador estadoAvionControlador, HistorialEstadoControlador historialEstadoControlador, RolTripulanteControlador rolTripulanteControlador
+        ModeloControlador modeloControlador, AvionControlador avioncControlador, EstadoAvionControlador estadoAvionControlador, HistorialEstadoControlador historialEstadoControlador, RolTripulanteControlador rolTripulanteControlador, ClienteControlador clienteControlador, TipoDocumentoControlador tipoDocumentoControlador 
     ) {
         try (Scanner scanner = new Scanner(System.in)) {
             boolean salir = false;
@@ -166,7 +183,7 @@ public class Main {
                             break;
                         case 2:
                             cleanScreen();
-                            mostrarMenuEntidades(scanner, estadoAvionControlador, asientoControlador,historialEstadoControlador, tipoEmpleadoControlador, empleadoControlador, fabricanteControlador,modeloControlador,avioncControlador, rolTripulanteControlador);
+                            mostrarMenuEntidades(scanner, clienteControlador,estadoAvionControlador, asientoControlador,historialEstadoControlador, tipoEmpleadoControlador, empleadoControlador, fabricanteControlador,modeloControlador,avioncControlador, rolTripulanteControlador, tipoDocumentoControlador);
                             break;
                         case 3:
                             cleanScreen();
@@ -281,9 +298,7 @@ public class Main {
     }
 
 
-    private static void mostrarMenuEntidades(Scanner scanner, EstadoAvionControlador estadoAvionControlador, AsientoControlador asientoControlador, HistorialEstadoControlador historialEstadoControlador, TipoEmpleadoControlador tipoEmpleadoControlador, EmpleadoControlador empleadoControlador,
-        FabricanteControlador fabricanteControlador, ModeloControlador modeloControlador, AvionControlador avioncControlador, RolTripulanteControlador rolTripulanteControlador
-    ) {
+    private static void mostrarMenuEntidades(Scanner scanner, ClienteControlador clienteControlador, EstadoAvionControlador estadoAvionControlador, AsientoControlador asientoControlador, HistorialEstadoControlador historialEstadoControlador, TipoEmpleadoControlador tipoEmpleadoControlador, EmpleadoControlador empleadoControlador, FabricanteControlador fabricanteControlador, ModeloControlador modeloControlador, AvionControlador avioncControlador, RolTripulanteControlador rolTripulanteControlador, TipoDocumentoControlador tipoDocumentoControlador) {
         boolean salirMenuEntidades = false;
 
         while (!salirMenuEntidades) {
@@ -390,14 +405,33 @@ public class Main {
                                     break;
                     case 3:
                         cleanScreen();
-                        System.out.println("Hola Jp, Vas muy bien, Te amo");
+                        System.out.println("Seleccione la opcion");
+                        System.out.println(" 1. Tipo Docummento");
+                        System.out.println(" 2. Cliente");
+                        try {
+                            int opCliente = Integer.parseInt(scanner.nextLine());
 
-                        // ciudadControlador.actualizarEntidad();
+                            switch (opCliente) {
+                                case 1:
+                                    cleanScreen();
+                                    tipoDocumentoControlador.start();
+
+                                    break;
+                                case 2:
+                                    cleanScreen();
+                                    clienteControlador.start();
+                                    
+                                default:
+                                    throw new AssertionError();
+                            }
+
+                        } catch (Exception e) {
+                        }
                         break;
                     case 4:
                         cleanScreen();
-                        System.out.println("Hola Jp, Vas muy bien, Te amo");
-                        // ciudadControlador.eliminarEntidad();
+                        System.out.println("Menu Vuelos");
+                        
                         break;
                     case 5:
                         cleanScreen();
@@ -420,10 +454,10 @@ public class Main {
         while (!salirMenuReservas) {
             System.out.println("--- Menú Reservas ---");
             System.out.println("Seleccione una opción:");
-            System.out.println("1. Crear Reserva");
-            System.out.println("2. Listar Reservas");
-            System.out.println("3. Actualizar Reserva");
-            System.out.println("4. Eliminar Reserva");
+            System.out.println("1. Tipo Tarifa");
+            System.out.println("2. Tarifa");
+            System.out.println("3. Pasajero");
+            System.out.println("4. Reserva");
             System.out.println("5. Volver");
 
             try {

@@ -1,5 +1,9 @@
 package avion.Infraestructure.in;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
+
 import aerolinea.Domain.Entity.Aerolinea;
 import aerolinea.Infraestructure.out.AerolineaRepository;
 import avion.Application.AvionUseCase;
@@ -8,10 +12,7 @@ import avion.Infraestructure.out.AvionRepository;
 import modelo.Domain.entity.Modelo;
 import modelo.Infraestructure.out.ModeloRepository;
 import utils.Consola;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import static utils.Consola.cleanScreen;
 
 public class AvionControlador {
     private final Scanner scanner = new Scanner(System.in);
@@ -38,18 +39,23 @@ public class AvionControlador {
 
             switch (opcion) {
                 case 1:
+                    cleanScreen();
                     crearAvion();
                     break;
                 case 2:
+                    cleanScreen();
                     obtenerTodosLosAviones();
                     break;
                 case 3:
+                    cleanScreen();
                     obtenerAvionPorId();
                     break;
                 case 4:
+                    cleanScreen();
                     actualizarAvion();
                     break;
                 case 5:
+                    cleanScreen();
                     eliminarAvion();
                     break;
                 case 6:
