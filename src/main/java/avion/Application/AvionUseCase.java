@@ -28,4 +28,11 @@ public class AvionUseCase {
     public Avion obtenerAvionPorId(Long id) {
         return avionServices.obtenerAvionPorId(id);
     }
+
+    public void actualizarAvion (Avion avion){
+        avionServices.actualizarAvion(avion);
+    }
+    public void eliminarAvion(Long id){
+        avionServices.eliminarAvion(id);
+    }
 }

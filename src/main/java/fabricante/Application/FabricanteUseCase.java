@@ -18,6 +18,18 @@ public class FabricanteUseCase {
     }
     public List<Fabricante> ObtenerTodosLosFabricantes(){
     return fabricanteServices.ObtenerTodosLosFabricantes();
-}
+    }
+
+    public Fabricante obtenerFabricantePorId (Long id){
+        return fabricanteServices.obtenerFabricantePorId(id);
+    }
+
+    public void actualizarFabricante (Fabricante fabricante){
+        fabricanteServices.actualizarFabricante(fabricante);
+    } 
+
+    public void eliminarFabricante (Long id){
+        fabricanteServices.eliminarFabricante(id);
+    }
 
 }

@@ -15,6 +15,10 @@ import asiento.Applicacion.AsientoUseCase;
 import asiento.Domain.Services.AsientoServices;
 import asiento.infraestructure.in.AsientoControlador;
 import asiento.infraestructure.out.AsientoRepository;
+import avion.Application.AvionUseCase;
+import avion.Domain.Services.AvionServices;
+import avion.Infraestructure.in.AvionControlador;
+import avion.Infraestructure.out.AvionRepository;
 import ciudad.Application.CiudadUseCase;
 import ciudad.Domain.Services.CiudadServices;
 import ciudad.infraestructure.in.CiudadControlador;
@@ -23,11 +27,31 @@ import empleado.Application.EmpleadoUseCase;
 import empleado.Domain.services.EmpleadoServices;
 import empleado.infraestructure.in.EmpleadoControlador;
 import empleado.infraestructure.out.EmpleadoRepository;
+import estadoAvion.Application.EstadoAvionUseCase;
+import estadoAvion.Domain.services.EstadoAvionServices;
+import estadoAvion.interfaces.in.EstadoAvionControlador;
+import estadoAvion.interfaces.out.EstadoAvionRepository;
+import fabricante.Application.FabricanteUseCase;
+import fabricante.Domain.Services.FabricanteServices;
+import fabricante.infraestructure.in.FabricanteControlador;
+import fabricante.infraestructure.out.FabricanteRepository;
+import historialEstado.Domain.services.HistorialEstadoServices;
+import historialEstado.application.HistorialEstadoUseCase;
+import historialEstado.interfaces.in.HistorialEstadoControlador;
+import historialEstado.interfaces.out.HistorialEstadoRepository;
+import modelo.Application.ModeloUseCase;
+import modelo.Domain.services.ModeloServices;
+import modelo.Infraestructure.in.ModeloControlador;
+import modelo.Infraestructure.out.ModeloRepository;
 import pais.Application.PaisUseCase;
 import pais.Domain.Services.PaisServices;
 import pais.infraesfructure.in.PaisControlador;
 import pais.infraesfructure.out.PaisRepository;
 import resource.ConfiguracionBaseDeDatos;
+import rolTripulante.Application.RolTripulnteUseCase;
+import rolTripulante.Domain.services.RolTripulanteServices;
+import rolTripulante.infraestructure.in.RolTripulanteControlador;
+import rolTripulante.infraestructure.out.RolTripulanteRepository;
 import tipoEmpleado.Application.TipoEmpleadoUseCase;
 import tipoEmpleado.Domain.services.TipoEmpleadoServices;
 import tipoEmpleado.infraestructure.in.TipoEmpleadoControlador;
@@ -73,14 +97,42 @@ public class Main {
             EmpleadoUseCase empleadoUseCase = new EmpleadoUseCase(empleadoServices);
             EmpleadoControlador empleadoControlador = new EmpleadoControlador(empleadoUseCase, null, null);
             
+            //Fabricante
+            FabricanteServices fabricanteServices = new FabricanteRepository();
+            FabricanteUseCase fabricanteUseCase = new FabricanteUseCase(fabricanteServices);
+            FabricanteControlador fabricanteControlador = new FabricanteControlador(fabricanteUseCase, null);
+
+            // Modelo 
+            ModeloServices modeloServices = new ModeloRepository();
+            ModeloUseCase modeloUseCase = new ModeloUseCase(modeloServices);
+            ModeloControlador modeloControlador = new ModeloControlador(modeloUseCase, null);
+
+
+            //Avion
+            AvionServices avionServices = new AvionRepository();
+            AvionUseCase avionUseCase = new AvionUseCase(avionServices);
+            AvionControlador avioncControlador = new AvionControlador(null, null, null, null);
+
+            //EstadoAvion
+            EstadoAvionServices estadoAvionServices = new EstadoAvionRepository();
+            EstadoAvionUseCase estadoAvionUseCase = new EstadoAvionUseCase(estadoAvionServices);
+            EstadoAvionControlador estadoAvionControlador = new EstadoAvionControlador( estadoAvionUseCase);
+
+            //HistorialEstado
+            HistorialEstadoServices historialEstadoServices = new HistorialEstadoRepository();
+            HistorialEstadoUseCase historialEstadoUseCase = new HistorialEstadoUseCase(historialEstadoServices);
+            HistorialEstadoControlador historialEstadoControlador = new HistorialEstadoControlador(historialEstadoUseCase, historialEstadoServices, null, null);
             //Rol Tripulante 
-            // RolTripulanteServices rolTripulanteServices = new RolTripulanteRepository();
-            // RolTripulnteUseCase rolTripulnteUseCase = new RolTripulnteUseCase(rolTripulanteServices);
+            RolTripulanteServices rolTripulanteServices = new RolTripulanteRepository();
+            RolTripulnteUseCase rolTripulnteUseCase = new RolTripulnteUseCase(rolTripulanteServices);
+            RolTripulanteControlador rolTripulanteControlador = new RolTripulanteControlador(rolTripulnteUseCase, null);
+
 
 
             // Llama al método de inicio para mostrar el menú
 
-            inicio(aerolineaControlador, ciudadControlador,aeropuertoControlador, paisControlador, asientoControlador, tipoEmpleadoControlador, empleadoControlador);
+            inicio(aerolineaControlador, ciudadControlador,aeropuertoControlador, paisControlador, asientoControlador, tipoEmpleadoControlador, empleadoControlador, fabricanteControlador, modeloControlador,
+            avioncControlador, estadoAvionControlador, historialEstadoControlador,rolTripulanteControlador);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,7 +141,9 @@ public class Main {
     }
 
 
-    private static void inicio(AerolineaControlador aerolineaControlador, CiudadControlador ciudadControlador,AeropuertoControlador aeropuertoControlador, PaisControlador paisControlador, AsientoControlador asientoControlador, TipoEmpleadoControlador tipoEmpleadoControlador, EmpleadoControlador empleadoControlador) {
+    private static void inicio(AerolineaControlador aerolineaControlador, CiudadControlador ciudadControlador,AeropuertoControlador aeropuertoControlador, PaisControlador paisControlador, AsientoControlador asientoControlador, TipoEmpleadoControlador tipoEmpleadoControlador, EmpleadoControlador empleadoControlador, FabricanteControlador fabricanteControlador,
+        ModeloControlador modeloControlador, AvionControlador avioncControlador, EstadoAvionControlador estadoAvionControlador, HistorialEstadoControlador historialEstadoControlador, RolTripulanteControlador rolTripulanteControlador
+    ) {
         try (Scanner scanner = new Scanner(System.in)) {
             boolean salir = false;
 
@@ -112,7 +166,7 @@ public class Main {
                             break;
                         case 2:
                             cleanScreen();
-                            mostrarMenuEntidades(scanner, asientoControlador, tipoEmpleadoControlador, empleadoControlador);
+                            mostrarMenuEntidades(scanner, estadoAvionControlador, asientoControlador,historialEstadoControlador, tipoEmpleadoControlador, empleadoControlador, fabricanteControlador,modeloControlador,avioncControlador, rolTripulanteControlador);
                             break;
                         case 3:
                             cleanScreen();
@@ -136,6 +190,9 @@ public class Main {
             System.out.println("Error al inicializar el scanner: " + e.getMessage());
         }
     }
+
+ 
+
 
     private static void mostrarMenuAeropuertos(Scanner scanner, AerolineaControlador aerolineaControlador, AeropuertoControlador aeropuertoControlador, PaisControlador paisControlador, CiudadControlador ciudadControlador) {
         boolean salirMenuAeropuertos = false;
@@ -224,7 +281,9 @@ public class Main {
     }
 
 
-    private static void mostrarMenuEntidades(Scanner scanner, AsientoControlador asientoControlador, TipoEmpleadoControlador tipoEmpleadoControlador, EmpleadoControlador empleadoControlador) {
+    private static void mostrarMenuEntidades(Scanner scanner, EstadoAvionControlador estadoAvionControlador, AsientoControlador asientoControlador, HistorialEstadoControlador historialEstadoControlador, TipoEmpleadoControlador tipoEmpleadoControlador, EmpleadoControlador empleadoControlador,
+        FabricanteControlador fabricanteControlador, ModeloControlador modeloControlador, AvionControlador avioncControlador, RolTripulanteControlador rolTripulanteControlador
+    ) {
         boolean salirMenuEntidades = false;
 
         while (!salirMenuEntidades) {
@@ -256,22 +315,26 @@ public class Main {
                             int opp = Integer.parseInt(scanner.nextLine());
                             switch (opp) {
                                 case 1:
-                                    // Fabricantes
+                                    cleanScreen();
+                                    tipoEmpleadoControlador.start();
                                     break;
                                 case 2:
-                                    //Modelo
+                                    cleanScreen();
+                                    empleadoControlador.start();
                                     break;
                                 case 3:
                                     cleanScreen();
-                                    asientoControlador.start();
+                                    estadoAvionControlador.start();
                                     break;
                                 case 4:
-                                    //Avion
+                                    cleanScreen();
+                                    fabricanteControlador.start();
                                     break;
                                 case 5: 
-                                    //EstadoAvion
+                                    cleanScreen();
+                                    modeloControlador.start();
                                 case 6:
-                                    //HistorialEstado               
+                                    avioncControlador.start();
                                     break;
                                 case 7:
                                     cleanScreen();
@@ -301,15 +364,15 @@ public class Main {
                             switch (op2) {
                                 case 1:
                                     cleanScreen();
-                                    tipoEmpleadoControlador.start();
+                                    asientoControlador.start();
                                     break;
                                 case 2:
                                     cleanScreen();
-                                    empleadoControlador.start();
+                                    historialEstadoControlador.start();
                                     break;
                                 case 3:
                                     cleanScreen();
-                                    // Rol Tripulante 
+                                    rolTripulanteControlador.start(); 
                                     break;
                                 case 4:
                                     cleanScreen();

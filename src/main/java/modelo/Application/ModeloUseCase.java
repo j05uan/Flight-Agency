@@ -39,4 +39,14 @@ public class ModeloUseCase {
             }
         }
     }
+
+    public void actualizarModelo(Modelo modelo){
+        modeloServices.actualizarModelo(modelo);
+    }
+
+    public void eliminarModelo(Long id){
+        modeloServices.eliminarModelo(id);
+    }
+
 }
+

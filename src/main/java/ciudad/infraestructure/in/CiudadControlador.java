@@ -104,6 +104,8 @@ public class CiudadControlador {
                 .orElse(0L) + 1;
 
         Ciudad ciudad = new Ciudad();
+        ciudad.setNombre(nombre);
+        ciudad.setPais(paisSeleccionado);
         ciudadUseCase.crearCiudad(ciudad);
         System.out.println("Ciudad creada con éxito.");
     }

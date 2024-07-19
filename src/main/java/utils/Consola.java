@@ -65,6 +65,26 @@ public class Consola {
         return fechaFabricacion;
     }
 
+    public static Date obtenerFechaDeHistorialEstado() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setLenient(false);  // Establece que el análisis de fechas no sea permisivo
+        Date fechaFabricacion = null;
+        boolean fechaValida = false;
+
+        while (!fechaValida) {
+            System.out.println("Ingrese la fecha del Estado (DD/MM/AAAA): ");
+            String fechaString = SCANNER.nextLine();
+            try {
+                fechaFabricacion = sdf.parse(fechaString);
+                fechaValida = true;  // La fecha es válida si no se lanza una excepción
+            } catch (ParseException e) {
+                System.out.println("Fecha inválida. Por favor, ingrese la fecha en el formato correcto (DD/MM/AAAA).");
+            }
+        }
+
+        return fechaFabricacion;
+    }
+
     public static String leerCadena(String mensaje) {
         System.out.println(mensaje);
         return SCANNER.nextLine();
