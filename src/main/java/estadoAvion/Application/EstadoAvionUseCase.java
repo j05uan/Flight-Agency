@@ -5,7 +5,7 @@ import java.util.List;
 import estadoAvion.Domain.entity.EstadoAvion;
 import estadoAvion.Domain.services.EstadoAvionServices;
 
-public class EstadoAvionUseCase {
+public class EstadoAvionUseCase implements EstadoAvionServices {
     private final EstadoAvionServices estadoAvionServices;
 
     public EstadoAvionUseCase(EstadoAvionServices estadoAvionServices) {
