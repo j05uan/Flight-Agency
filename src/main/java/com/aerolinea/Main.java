@@ -171,7 +171,8 @@ public class Main {
                 System.out.println("1. Aeropuertos");
                 System.out.println("2. Entidades");
                 System.out.println("3. Reservas");
-                System.out.println("4. Salir");
+                System.out.println("4. Revision");
+                System.out.println("5. Salir");
 
                 try {
                     int opcion = Integer.parseInt(scanner.nextLine());
@@ -190,6 +191,26 @@ public class Main {
                             mostrarMenuReservas(scanner);
                             break;
                         case 4:
+                            cleanScreen();
+                            System.out.println("Menu Revision");
+                            System.out.println("Seleccione una Opcion");
+                            System.out.println("1. Revision");
+                            System.out.println("2. Asignar Revision");
+                            System.out.println("3. Atras.");
+                            try {
+                                int opcionRevision = Integer.parseInt(scanner.nextLine());
+                                switch (opcionRevision) {
+                                    case 1:
+                                        cleanScreen();
+
+                                        break;
+                                
+                                    default:
+                                        break;
+                                }
+                            } catch (Exception e) {
+                            }
+                        case 5:
                             cleanScreen();
                             salir = true;
                             System.out.println("Saliendo del sistema...");
@@ -241,9 +262,7 @@ public class Main {
                         break;
                     case 4:
                         cleanScreen();
-
-
-                        // Incliur la salida Aeropuertos
+                        
                     case 5:
                         cleanScreen();
                         salirMenuAeropuertos = true;
@@ -405,6 +424,7 @@ public class Main {
                                     break;
                     case 3:
                         cleanScreen();
+                        System.out.println("-- Menu Ciente ---");
                         System.out.println("Seleccione la opcion");
                         System.out.println(" 1. Tipo Docummento");
                         System.out.println(" 2. Cliente");
@@ -432,8 +452,15 @@ public class Main {
                         cleanScreen();
                         System.out.println("Menu Vuelos");
                         
+
                         break;
                     case 5:
+                        cleanScreen();
+                        System.out.println("Menu Pasajero");
+
+
+                        break;
+                    case 6:
                         cleanScreen();
                         salirMenuEntidades = true;
                         break;

@@ -8,15 +8,13 @@ import ruta.Domain.Entity.Ruta;
 public class SalidaAeropuerto {
     private Long id;
     private Aeropuerto aeropuerto;
-    private Ruta ruta;
-    private java.util.Date fecha;
+    private String salidaAeropuerto;
     public SalidaAeropuerto() {
     }
-    public SalidaAeropuerto(Long id, Aeropuerto aeropuerto, Ruta ruta, Date fecha) {
+    public SalidaAeropuerto(Long id, Aeropuerto aeropuerto, Ruta ruta, Date fecha, String salidaAeropuerto) {
         this.id = id;
         this.aeropuerto = aeropuerto;
-        this.ruta = ruta;
-        this.fecha = fecha;
+        this.salidaAeropuerto = salidaAeropuerto;
     }
     public Long getId() {
         return id;
@@ -30,19 +28,14 @@ public class SalidaAeropuerto {
     public void setAeropuerto(Aeropuerto aeropuerto) {
         this.aeropuerto = aeropuerto;
     }
-    public Ruta getRuta() {
-        return ruta;
+    public String getSalidaAeropuerto() {
+        return salidaAeropuerto;
     }
-    public void setRuta(Ruta ruta) {
-        this.ruta = ruta;
-    }
-    public java.util.Date getFecha() {
-        return fecha;
-    }
-    public void setFecha(java.util.Date fecha) {
-        this.fecha = fecha;
+    public void setSalidaAeropuerto(String salidaAeropuerto) {
+        this.salidaAeropuerto = salidaAeropuerto;
     }
 
+    
     
 
 }

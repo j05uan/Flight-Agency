@@ -1,6 +1,5 @@
 package ruta.Domain.Entity;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -15,7 +14,7 @@ public class Ruta {
     private java.util.Date fecha;
     private Aeropuerto aeropuertoOrigen;
     private Aeropuerto aeropuertoDestino;
-    private java.math.BigDecimal valor;
+    private SalidaAeropuerto salidaAeropuerto;
     private Set<Reserva> reservas;
     private Set<Escala> escalas;
     private Set<SalidaAeropuerto> salidas;
@@ -23,15 +22,17 @@ public class Ruta {
     public Ruta() {
     }
 
-    public Ruta(Aeropuerto aeropuertoDestino, Aeropuerto aeropuertoOrigen, Set<Escala> escalas, Date fecha, Long id, Set<Reserva> reservas, Set<SalidaAeropuerto> salidas, BigDecimal valor) {
-        this.aeropuertoDestino = aeropuertoDestino;
-        this.aeropuertoOrigen = aeropuertoOrigen;
-        this.escalas = escalas;
-        this.fecha = fecha;
+    public Ruta(Long id, Date fecha, Aeropuerto aeropuertoOrigen, Aeropuerto aeropuertoDestino,
+            SalidaAeropuerto salidaAeropuerto, Set<Reserva> reservas, Set<Escala> escalas,
+            Set<SalidaAeropuerto> salidas) {
         this.id = id;
+        this.fecha = fecha;
+        this.aeropuertoOrigen = aeropuertoOrigen;
+        this.aeropuertoDestino = aeropuertoDestino;
+        this.salidaAeropuerto = salidaAeropuerto;
         this.reservas = reservas;
+        this.escalas = escalas;
         this.salidas = salidas;
-        this.valor = valor;
     }
 
     public Long getId() {
@@ -42,11 +43,11 @@ public class Ruta {
         this.id = id;
     }
 
-    public Date getFecha() {
+    public java.util.Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(java.util.Date fecha) {
         this.fecha = fecha;
     }
 
@@ -66,12 +67,12 @@ public class Ruta {
         this.aeropuertoDestino = aeropuertoDestino;
     }
 
-    public BigDecimal getValor() {
-        return valor;
+    public SalidaAeropuerto getSalidaAeropuerto() {
+        return salidaAeropuerto;
     }
 
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
+    public void setSalidaAeropuerto(SalidaAeropuerto salidaAeropuerto) {
+        this.salidaAeropuerto = salidaAeropuerto;
     }
 
     public Set<Reserva> getReservas() {
@@ -98,6 +99,7 @@ public class Ruta {
         this.salidas = salidas;
     }
 
+    
     
 
 }
