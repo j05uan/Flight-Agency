@@ -56,6 +56,10 @@ import rolTripulante.Application.RolTripulnteUseCase;
 import rolTripulante.Domain.services.RolTripulanteServices;
 import rolTripulante.infraestructure.in.RolTripulanteControlador;
 import rolTripulante.infraestructure.out.RolTripulanteRepository;
+import salidaAeropuerto.Application.SalidaAeropuertoUseCase;
+import salidaAeropuerto.Domain.services.SalidaAeropuertoServices;
+import salidaAeropuerto.infraestructure.in.SalidaAeropuertoControlador;
+import salidaAeropuerto.infraestructure.out.SalidaAeropuertoRepository;
 import tipoDocumento.Applicacion.TipoDocumentoUseCase;
 import tipoDocumento.Domain.services.TipoDocumentoServices;
 import tipoDocumento.infraestructure.in.TipoDocumentoControlador;
@@ -145,11 +149,17 @@ public class Main {
             TipoDocumentoUseCase tipoDocumentoUseCase = new TipoDocumentoUseCase(tDocumentoServices);
             TipoDocumentoControlador tipoDocumentoControlador = new TipoDocumentoControlador(tipoDocumentoUseCase);
 
+            //Salidas Aeropuerto
+            SalidaAeropuertoServices salidaAeropuertoServices = new SalidaAeropuertoRepository();
+            SalidaAeropuertoUseCase salidaAeropuertoUseCase = new SalidaAeropuertoUseCase(salidaAeropuertoServices);
+            SalidaAeropuertoControlador salidaAeropuertoControlador = new SalidaAeropuertoControlador(salidaAeropuertoUseCase, null, null);
+
+
 
             // Llama al método de inicio para mostrar el menú
 
             inicio(aerolineaControlador, ciudadControlador,aeropuertoControlador, paisControlador, asientoControlador, tipoEmpleadoControlador, empleadoControlador, fabricanteControlador, modeloControlador,
-            avioncControlador, estadoAvionControlador, historialEstadoControlador,rolTripulanteControlador,clienteControlador, tipoDocumentoControlador);
+            avioncControlador, estadoAvionControlador, historialEstadoControlador,rolTripulanteControlador,clienteControlador, tipoDocumentoControlador, salidaAeropuertoControlador);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -159,7 +169,7 @@ public class Main {
 
 
     private static void inicio(AerolineaControlador aerolineaControlador, CiudadControlador ciudadControlador,AeropuertoControlador aeropuertoControlador, PaisControlador paisControlador, AsientoControlador asientoControlador, TipoEmpleadoControlador tipoEmpleadoControlador, EmpleadoControlador empleadoControlador, FabricanteControlador fabricanteControlador,
-        ModeloControlador modeloControlador, AvionControlador avioncControlador, EstadoAvionControlador estadoAvionControlador, HistorialEstadoControlador historialEstadoControlador, RolTripulanteControlador rolTripulanteControlador, ClienteControlador clienteControlador, TipoDocumentoControlador tipoDocumentoControlador 
+        ModeloControlador modeloControlador, AvionControlador avioncControlador, EstadoAvionControlador estadoAvionControlador, HistorialEstadoControlador historialEstadoControlador, RolTripulanteControlador rolTripulanteControlador, ClienteControlador clienteControlador, TipoDocumentoControlador tipoDocumentoControlador, SalidaAeropuertoControlador salidaAeropuertoControlador
     ) {
         try (Scanner scanner = new Scanner(System.in)) {
             boolean salir = false;
@@ -180,7 +190,7 @@ public class Main {
                     switch (opcion) {
                         case 1:
                             cleanScreen();
-                            mostrarMenuAeropuertos(scanner, aerolineaControlador, aeropuertoControlador,paisControlador,ciudadControlador);
+                            mostrarMenuAeropuertos(scanner, aerolineaControlador, aeropuertoControlador,paisControlador,ciudadControlador, salidaAeropuertoControlador);
                             break;
                         case 2:
                             cleanScreen();
@@ -229,10 +239,7 @@ public class Main {
         }
     }
 
- 
-
-
-    private static void mostrarMenuAeropuertos(Scanner scanner, AerolineaControlador aerolineaControlador, AeropuertoControlador aeropuertoControlador, PaisControlador paisControlador, CiudadControlador ciudadControlador) {
+    private static void mostrarMenuAeropuertos(Scanner scanner, AerolineaControlador aerolineaControlador, AeropuertoControlador aeropuertoControlador, PaisControlador paisControlador, CiudadControlador ciudadControlador, SalidaAeropuertoControlador salidaAeropuertoControlador) {
         boolean salirMenuAeropuertos = false;
 
         while (!salirMenuAeropuertos) {
@@ -262,7 +269,7 @@ public class Main {
                         break;
                     case 4:
                         cleanScreen();
-                        
+                        salidaAeropuertoControlador.start();
                     case 5:
                         cleanScreen();
                         salirMenuAeropuertos = true;
@@ -451,6 +458,29 @@ public class Main {
                     case 4:
                         cleanScreen();
                         System.out.println("Menu Vuelos");
+                        System.out.println("Seleccione una opcion");
+                        System.out.println("1. Escalas");
+                        System.out.println("2. Vuelos");
+                        System.out.println("3. Tripulaccion de Vuelo");
+                        System.out.println("4. Salir");
+                        try {
+                            int opccion = Integer.parseInt(scanner.nextLine());
+                            switch (opccion) {
+                                case 1:
+                                    cleanScreen();
+
+                                    break;
+                                case 2:
+                                    cleanScreen();
+                                
+                                case 3:
+
+                                default:
+                                    throw new AssertionError();
+                            }
+                            
+                        } catch (Exception e) {
+                        }
                         
 
                         break;

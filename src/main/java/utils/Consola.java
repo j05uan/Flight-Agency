@@ -89,21 +89,21 @@ public class Consola {
     public static Date fechaRuta() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         sdf.setLenient(false);  // Establece que el análisis de fechas no sea permisivo
-        Date fechaFabricacion = null;
+        Date fecha = null;
         boolean fechaValida = false;
 
         while (!fechaValida) {
             System.out.println("Ingrese la fecha del Estado (DD/MM/AAAA): ");
             String fechaString = SCANNER.nextLine();
             try {
-                fechaFabricacion = sdf.parse(fechaString);
+                fecha = sdf.parse(fechaString);
                 fechaValida = true;  // La fecha es válida si no se lanza una excepción
             } catch (ParseException e) {
                 System.out.println("Fecha inválida. Por favor, ingrese la fecha en el formato correcto (DD/MM/AAAA).");
             }
         }
 
-        return fechaFabricacion;
+        return fecha;
     }
 
     public static String leerCadena(String mensaje) {

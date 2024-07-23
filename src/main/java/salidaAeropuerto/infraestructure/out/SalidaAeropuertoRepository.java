@@ -22,7 +22,7 @@ public class SalidaAeropuertoRepository implements SalidaAeropuertoServices{
             PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             statement.setLong(1, aeropuertoSalida.getAeropuerto().getId());  
-            statement.setString(4, aeropuertoSalida.getSalidaAeropuerto());  
+            statement.setString(2, aeropuertoSalida.getSalidaAeropuerto());  
 
             int affectedRows = statement.executeUpdate();
 
