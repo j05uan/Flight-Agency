@@ -68,21 +68,41 @@ public class Consola {
     public static Date obtenerFechaDeHistorialEstado() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         sdf.setLenient(false);  // Establece que el análisis de fechas no sea permisivo
-        Date fechaFabricacion = null;
+        Date fechaHistorialEstado = null;
         boolean fechaValida = false;
 
         while (!fechaValida) {
             System.out.println("Ingrese la fecha del Estado (DD/MM/AAAA): ");
             String fechaString = SCANNER.nextLine();
             try {
-                fechaFabricacion = sdf.parse(fechaString);
+                fechaHistorialEstado = sdf.parse(fechaString);
                 fechaValida = true;  // La fecha es válida si no se lanza una excepción
             } catch (ParseException e) {
                 System.out.println("Fecha inválida. Por favor, ingrese la fecha en el formato correcto (DD/MM/AAAA).");
             }
         }
 
-        return fechaFabricacion;
+        return fechaHistorialEstado;
+    }
+
+    public static Date obtenerFechaDeHistorialTarifa() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setLenient(false);  // Establece que el análisis de fechas no sea permisivo
+        Date fechaHistorialTarifa = null;
+        boolean fechaValida = false;
+
+        while (!fechaValida) {
+            System.out.println("Ingrese la fecha del registro de la Tarifa (DD/MM/AAAA): ");
+            String fechaString = SCANNER.nextLine();
+            try {
+                fechaHistorialTarifa = sdf.parse(fechaString);
+                fechaValida = true;  // La fecha es válida si no se lanza una excepción
+            } catch (ParseException e) {
+                System.out.println("Fecha inválida. Por favor, ingrese la fecha en el formato correcto (DD/MM/AAAA).");
+            }
+        }
+
+        return fechaHistorialTarifa;
     }
 
 
@@ -93,7 +113,7 @@ public class Consola {
         boolean fechaValida = false;
 
         while (!fechaValida) {
-            System.out.println("Ingrese la fecha del Estado (DD/MM/AAAA): ");
+            System.out.println("Ingrese la fecha del salida (DD/MM/AAAA): ");
             String fechaString = SCANNER.nextLine();
             try {
                 fecha = sdf.parse(fechaString);
