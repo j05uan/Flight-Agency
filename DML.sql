@@ -126,9 +126,9 @@ INSERT INTO tarifasRutas (ruta_id, tarifa_id) VALUES
 
 
 INSERT INTO RutaEscala (idAeropuertoOrigen, idAeropuertoDestino, idVuelo, idAvion, horaLlegada, horaSalida, salidas_aeropuerto_id) VALUES
-    (2, 1, 1, 10, '10:00', '08:00', 1),  -- Vuelo AA1234 desde Los Ángeles a Nueva York
-    (3, 4, 2, 11, '11:30', '09:30', 2),  -- Vuelo IB5678 desde Madrid a Barcelona
-    (5, 6, 3, 12, '13:00', '11:00', 3);  -- Vuelo AF9123 desde París a París
+    (2, 1, 1, 1, '10:00', '08:00', 1),  -- Vuelo AA1234 desde Los Ángeles a Nueva York
+    (3, 4, 2, 2, '11:30', '09:30', 2),  -- Vuelo IB5678 desde Madrid a Barcelona
+    (5, 6, 3, 2, '13:00', '11:00', 3);  -- Vuelo AF9123 desde París a París
 
 INSERT INTO historial_tarifas (tarifa_id, fecha_inicio, valor) VALUES
     (1, '2023-01-01', 200.00),   -- Tarifa económica iniciada el 1 de enero de 2023
@@ -142,9 +142,9 @@ INSERT INTO rol_tripulante (rol) VALUES
     
     
 INSERT INTO tripulacion_de_vuelo (vuelo_id, empleado_id, rol_id) VALUES
-    (16, 1, 1),  -- Juan Pérez como piloto en vuelo AA1234
-    (17, 2, 3),  -- María López como sobrecargo en vuelo IB5678
-    (16, 3, 3);  -- Pedro Ramírez como sobrecargo en vuelo AF9123
+    (1, 1, 1),  -- Juan Pérez como piloto en vuelo AA1234
+    (2, 2, 3),  -- María López como sobrecargo en vuelo IB5678
+    (3, 3, 3);  -- Pedro Ramírez como sobrecargo en vuelo AF9123
     
     
 INSERT INTO asientos (nombre) VALUES
@@ -152,11 +152,11 @@ INSERT INTO asientos (nombre) VALUES
     ('Clase Comercial');
 
 INSERT INTO asientosAvion (avion_id, asieto_id, columna) VALUES
-    (10, 1, 'A'),  
-    (11, 2, 'B'),  
-    (12, 2, 'A'),  
-    (12, 2, 'B'),  
-    (11, 1, 'A');  
+    (1, 1, 'A'),  
+    (1, 2, 'B'),  
+    (2, 2, 'A'),  
+    (2, 2, 'B'),  
+    (1, 1, 'A');  
 
 INSERT INTO clientes (nombre, edad, tipo_documento_id, documento) VALUES
     ('Ana García', 30, 1, '12345678A'),
@@ -174,9 +174,9 @@ INSERT INTO pasajeros (cliente_id, nombre, apellido) VALUES
     (3, 'Elena', 'López');
     
 INSERT INTO asientos_reservas (reserva_id, asiento_id, pasajero_id) VALUES
-    (1, 11, 1),  -- Asiento A1 reservado por Ana García en vuelo AA1234
-    (2, 12, 2),  -- Asiento B2 reservado por Carlos Martínez en vuelo IB5678
-    (3, 13, 3);  -- Asiento A1 reservado por Elena López en vuelo AF9123
+    (1, 1, 1),  -- Asiento A1 reservado por Ana García en vuelo AA1234
+    (2, 2, 2),  -- Asiento B2 reservado por Carlos Martínez en vuelo IB5678
+    (3, 1, 3);  -- Asiento A1 reservado por Elena López en vuelo AF9123
 
 
 
