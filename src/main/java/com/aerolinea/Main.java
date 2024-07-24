@@ -51,11 +51,23 @@ import pais.Application.PaisUseCase;
 import pais.Domain.Services.PaisServices;
 import pais.infraesfructure.in.PaisControlador;
 import pais.infraesfructure.out.PaisRepository;
+import pasajero.Applicacion.PasajeroUseCase;
+import pasajero.Domain.services.PasajeroServices;
+import pasajero.infraestructure.in.PasajeroControlador;
+import pasajero.infraestructure.out.PasajeroRepository;
 import resource.ConfiguracionBaseDeDatos;
 import rolTripulante.Application.RolTripulnteUseCase;
 import rolTripulante.Domain.services.RolTripulanteServices;
 import rolTripulante.infraestructure.in.RolTripulanteControlador;
 import rolTripulante.infraestructure.out.RolTripulanteRepository;
+import ruta.Application.RutaUseCase;
+import ruta.Domain.Services.RutaServices;
+import ruta.Infraestructure.in.RutaControlador;
+import ruta.Infraestructure.out.RutaRepository;
+import rutaEscala.Applicacion.RutaEscalaUseCase;
+import rutaEscala.Domain.services.RutaEscalaServices;
+import rutaEscala.interfaces.in.RutaEscalaControlador;
+import rutaEscala.interfaces.out.RutaEscalaRepository;
 import salidaAeropuerto.Application.SalidaAeropuertoUseCase;
 import salidaAeropuerto.Domain.services.SalidaAeropuertoServices;
 import salidaAeropuerto.infraestructure.in.SalidaAeropuertoControlador;
@@ -154,12 +166,27 @@ public class Main {
             SalidaAeropuertoUseCase salidaAeropuertoUseCase = new SalidaAeropuertoUseCase(salidaAeropuertoServices);
             SalidaAeropuertoControlador salidaAeropuertoControlador = new SalidaAeropuertoControlador(salidaAeropuertoUseCase, null, null);
 
+            // Vuelos 
+            RutaServices rutaServices = new RutaRepository();
+            RutaUseCase rutaUseCase = new RutaUseCase(rutaServices);
+            RutaControlador rutaControlador = new RutaControlador(null, rutaUseCase, null, null, null);
+
+            //Escalas 
+            RutaEscalaServices rutaEscalaServices = new RutaEscalaRepository();
+            RutaEscalaUseCase rutaEscalaUseCase = new RutaEscalaUseCase(rutaEscalaServices);
+            RutaEscalaControlador rutaEscalaControlador = new RutaEscalaControlador(rutaEscalaUseCase, null, null, null, null, null, null);
+
+            //Pasajero
+            PasajeroServices pasajeroServices = new PasajeroRepository();
+            PasajeroUseCase pasajeroUseCase = new PasajeroUseCase(pasajeroServices);
+            PasajeroControlador pasajeroControlador = new PasajeroControlador(pasajeroUseCase, null);
 
 
             // Llama al método de inicio para mostrar el menú
 
             inicio(aerolineaControlador, ciudadControlador,aeropuertoControlador, paisControlador, asientoControlador, tipoEmpleadoControlador, empleadoControlador, fabricanteControlador, modeloControlador,
-            avioncControlador, estadoAvionControlador, historialEstadoControlador,rolTripulanteControlador,clienteControlador, tipoDocumentoControlador, salidaAeropuertoControlador);
+            avioncControlador, estadoAvionControlador, historialEstadoControlador,rolTripulanteControlador,clienteControlador, tipoDocumentoControlador, salidaAeropuertoControlador, rutaControlador,
+            rutaEscalaControlador, pasajeroControlador   );
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -169,8 +196,10 @@ public class Main {
 
 
     private static void inicio(AerolineaControlador aerolineaControlador, CiudadControlador ciudadControlador,AeropuertoControlador aeropuertoControlador, PaisControlador paisControlador, AsientoControlador asientoControlador, TipoEmpleadoControlador tipoEmpleadoControlador, EmpleadoControlador empleadoControlador, FabricanteControlador fabricanteControlador,
-        ModeloControlador modeloControlador, AvionControlador avioncControlador, EstadoAvionControlador estadoAvionControlador, HistorialEstadoControlador historialEstadoControlador, RolTripulanteControlador rolTripulanteControlador, ClienteControlador clienteControlador, TipoDocumentoControlador tipoDocumentoControlador, SalidaAeropuertoControlador salidaAeropuertoControlador
-    ) {
+        ModeloControlador modeloControlador, AvionControlador avioncControlador, EstadoAvionControlador estadoAvionControlador, HistorialEstadoControlador historialEstadoControlador, RolTripulanteControlador rolTripulanteControlador, ClienteControlador clienteControlador, TipoDocumentoControlador tipoDocumentoControlador, SalidaAeropuertoControlador salidaAeropuertoControlador,
+        RutaControlador rutaControlador, RutaEscalaControlador rutaEscalaControlador, PasajeroControlador pasajeroControlador
+            
+        ) {
         try (Scanner scanner = new Scanner(System.in)) {
             boolean salir = false;
 
@@ -194,7 +223,7 @@ public class Main {
                             break;
                         case 2:
                             cleanScreen();
-                            mostrarMenuEntidades(scanner, clienteControlador,estadoAvionControlador, asientoControlador,historialEstadoControlador, tipoEmpleadoControlador, empleadoControlador, fabricanteControlador,modeloControlador,avioncControlador, rolTripulanteControlador, tipoDocumentoControlador);
+                            mostrarMenuEntidades(scanner, clienteControlador,rutaEscalaControlador, pasajeroControlador, estadoAvionControlador,rutaControlador, asientoControlador,historialEstadoControlador, tipoEmpleadoControlador, empleadoControlador, fabricanteControlador,modeloControlador,avioncControlador, rolTripulanteControlador, tipoDocumentoControlador);
                             break;
                         case 3:
                             cleanScreen();
@@ -324,7 +353,8 @@ public class Main {
     }
 
 
-    private static void mostrarMenuEntidades(Scanner scanner, ClienteControlador clienteControlador, EstadoAvionControlador estadoAvionControlador, AsientoControlador asientoControlador, HistorialEstadoControlador historialEstadoControlador, TipoEmpleadoControlador tipoEmpleadoControlador, EmpleadoControlador empleadoControlador, FabricanteControlador fabricanteControlador, ModeloControlador modeloControlador, AvionControlador avioncControlador, RolTripulanteControlador rolTripulanteControlador, TipoDocumentoControlador tipoDocumentoControlador) {
+    private static void mostrarMenuEntidades(Scanner scanner, ClienteControlador clienteControlador, RutaEscalaControlador rutaEscalaControlador, PasajeroControlador pasajeroControlador, EstadoAvionControlador estadoAvionControlador, RutaControlador rutaControlador, AsientoControlador asientoControlador, HistorialEstadoControlador historialEstadoControlador, TipoEmpleadoControlador tipoEmpleadoControlador, EmpleadoControlador empleadoControlador, FabricanteControlador fabricanteControlador, ModeloControlador modeloControlador, AvionControlador avioncControlador, RolTripulanteControlador rolTripulanteControlador, TipoDocumentoControlador tipoDocumentoControlador) 
+        {
         boolean salirMenuEntidades = false;
 
         while (!salirMenuEntidades) {
@@ -468,13 +498,16 @@ public class Main {
                             switch (opccion) {
                                 case 1:
                                     cleanScreen();
-
+                                    rutaEscalaControlador.start();
                                     break;
                                 case 2:
                                     cleanScreen();
-                                
+                                    rutaControlador.start();
+                                    break;
                                 case 3:
+                                    cleanScreen();
 
+                                    break;
                                 default:
                                     throw new AssertionError();
                             }
@@ -486,7 +519,7 @@ public class Main {
                         break;
                     case 5:
                         cleanScreen();
-                        System.out.println("Menu Pasajero");
+                        pasajeroControlador.start();
 
 
                         break;

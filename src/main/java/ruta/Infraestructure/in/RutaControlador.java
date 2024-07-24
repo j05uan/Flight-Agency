@@ -10,6 +10,8 @@ import aeropuerto.infraestructure.out.AeropuertoRepository;
 import ruta.Application.RutaUseCase;
 import ruta.Domain.Entity.Ruta;
 import ruta.Infraestructure.out.RutaRepository;
+import rutaEscala.Domain.entity.RutaEscala;
+import rutaEscala.interfaces.out.RutaEscalaRepository;
 import salidaAeropuerto.Domain.entity.SalidaAeropuerto;
 import salidaAeropuerto.infraestructure.out.SalidaAeropuertoRepository;
 import utils.Consola;
@@ -22,6 +24,7 @@ public class RutaControlador {
     private final RutaRepository rutaRepo;
     private final AeropuertoRepository aeropuertoRepo;
     private final SalidaAeropuertoRepository salidaAeropuertoRepo;
+    private final RutaEscalaRepository rutaEscalaRepo;
 
     public RutaControlador(Scanner scanner, RutaUseCase rutaUseCase, RutaRepository rutaRepo,
             AeropuertoRepository aeropuertoRepo, SalidaAeropuertoRepository sAeropuertoRepo) {
@@ -30,6 +33,7 @@ public class RutaControlador {
         this.rutaRepo = rutaRepo;
         this.aeropuertoRepo = aeropuertoRepo;
         this.salidaAeropuertoRepo = sAeropuertoRepo;
+        this.rutaEscalaRepo = new RutaEscalaRepository();
     }
 
     public void start() {
@@ -112,6 +116,14 @@ public class RutaControlador {
         rutaRepo.CrearRuta(nuevaRuta);
 
         System.out.println("Ruta creada exitosamente. Id de la ruta: " + nuevaRuta.getId());
+        
+        int escalas = scanner.nextInt();
+        for(int i =0;i<escalas;i++){
+            Ruta idRuta = rutaRepo.obtenerRutaPorId(nuevaRuta.getId());
+            RutaEscala rutaEscala = new RutaEscala();
+            rutaEscala.setRuta(idRuta);
+            rutaEscalaRepo.crearRutaEscala(rutaEscala);
+        }
     }
 
     public void obtenerTodosLosRutas() {
@@ -164,9 +176,30 @@ public class RutaControlador {
 
         if (ruta != null) {
             System.out.println("Seleccione los nuevos datos para la ruta:");
-            Date nuevaFecha = Consola.fechaRuta();  
-            ruta.setFecha(nuevaFecha);
-            rutaUseCase.actualizarRuta(ruta);  
+            Date fecha = Consola.fechaRuta();  // Cambiar a Date si es necesario
+            List<Aeropuerto> aeropuertos = aeropuertoRepo.obtenerTodosLosAeropuertos();
+            System.out.println("Seleccione el aeropuerto Origen:");
+            mostrarAeropuerto(aeropuertos);
+            int opcionAeropuertoOrigen = Consola.optionValidation("Ingrese el id del aeropuerto Origen", 1, aeropuertos.size());
+            Aeropuerto aeropuertoSeleccionadoOrigen = aeropuertos.get(opcionAeropuertoOrigen - 1);
+            
+            System.out.println("Seleccione el aeropuerto Destino:");
+            mostrarAeropuerto(aeropuertos);
+            int opcionAeropuertoDestino = Consola.optionValidation("Ingrese el id del aeropuerto Destino", 1, aeropuertos.size());
+            Aeropuerto aeropuertoSeleccionadoDestino = aeropuertos.get(opcionAeropuertoDestino - 1);
+            
+            List<SalidaAeropuerto> salidaAeropuertos = salidaAeropuertoRepo.obtenerTodosAeropuertoSalidas();
+            System.out.println("Seleccione la Salida:");
+            mostrarSalidasAeropuerto(salidaAeropuertos);
+            int opcionSalidaAeropuerto = Consola.optionValidation("Ingrese el id de la Salida Seleccionada", 1, salidaAeropuertos.size());
+            SalidaAeropuerto salidaAeropuertoSeleccionada = salidaAeropuertos.get(opcionSalidaAeropuerto - 1);
+
+            Ruta nuevaRuta = new Ruta();
+            nuevaRuta.setFecha(fecha);
+            nuevaRuta.setAeropuertoOrigen(aeropuertoSeleccionadoOrigen);
+            nuevaRuta.setAeropuertoDestino(aeropuertoSeleccionadoDestino);
+            nuevaRuta.setSalidaAeropuerto(salidaAeropuertoSeleccionada);
+            rutaRepo.CrearRuta(nuevaRuta);
 
             System.out.println("Ruta actualizada exitosamente.");
         } else {

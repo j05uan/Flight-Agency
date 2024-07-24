@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Set;
 
 import aeropuerto.domain.entity.Aeropuerto;
-import escala.Domain.entity.Escala;
 import reserva.Domain.entity.Reserva;
 import salidaAeropuerto.Domain.entity.SalidaAeropuerto;
 
@@ -16,14 +15,13 @@ public class Ruta {
     private Aeropuerto aeropuertoDestino;
     private SalidaAeropuerto salidaAeropuerto;
     private Set<Reserva> reservas;
-    private Set<Escala> escalas;
     private Set<SalidaAeropuerto> salidas;
 
     public Ruta() {
     }
 
     public Ruta(Long id, Date fecha, Aeropuerto aeropuertoOrigen, Aeropuerto aeropuertoDestino,
-            SalidaAeropuerto salidaAeropuerto, Set<Reserva> reservas, Set<Escala> escalas,
+            SalidaAeropuerto salidaAeropuerto, Set<Reserva> reservas,
             Set<SalidaAeropuerto> salidas) {
         this.id = id;
         this.fecha = fecha;
@@ -31,9 +29,9 @@ public class Ruta {
         this.aeropuertoDestino = aeropuertoDestino;
         this.salidaAeropuerto = salidaAeropuerto;
         this.reservas = reservas;
-        this.escalas = escalas;
         this.salidas = salidas;
     }
+
 
     public Long getId() {
         return id;
@@ -81,14 +79,6 @@ public class Ruta {
 
     public void setReservas(Set<Reserva> reservas) {
         this.reservas = reservas;
-    }
-
-    public Set<Escala> getEscalas() {
-        return escalas;
-    }
-
-    public void setEscalas(Set<Escala> escalas) {
-        this.escalas = escalas;
     }
 
     public Set<SalidaAeropuerto> getSalidas() {

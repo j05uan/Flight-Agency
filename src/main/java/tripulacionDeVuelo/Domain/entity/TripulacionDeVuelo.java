@@ -1,19 +1,19 @@
 package tripulacionDeVuelo.Domain.entity;
 
 import empleado.Domain.entity.Empleado;
-import escala.Domain.entity.Escala;
 import rolTripulante.Domain.entity.RolTripulante;
+import rutaEscala.Domain.entity.RutaEscala;
 
 public class TripulacionDeVuelo {
     private Long id;
-    private Escala vuelo;
+    private RutaEscala vuelo;
     private Empleado empleado;
     private RolTripulante rol;
 
     public TripulacionDeVuelo() {
     }
 
-    public TripulacionDeVuelo(Empleado empleado, Long id, RolTripulante rol, Escala vuelo) {
+    public TripulacionDeVuelo(Empleado empleado, Long id, RolTripulante rol, RutaEscala vuelo) {
         this.empleado = empleado;
         this.id = id;
         this.rol = rol;
@@ -28,11 +28,11 @@ public class TripulacionDeVuelo {
         this.id = id;
     }
 
-    public Escala getVuelo() {
+    public RutaEscala getVuelo() {
         return vuelo;
     }
 
-    public void setVuelo(Escala vuelo) {
+    public void setVuelo(RutaEscala vuelo) {
         this.vuelo = vuelo;
     }
 

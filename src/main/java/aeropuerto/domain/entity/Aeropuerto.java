@@ -3,20 +3,20 @@ package aeropuerto.domain.entity;
 import java.util.Set;
 
 import ciudad.Domain.Entity.Ciudad;
-import escala.Domain.entity.Escala;
+import rutaEscala.Domain.entity.RutaEscala;
 import salidaAeropuerto.Domain.entity.SalidaAeropuerto;
 
 public class Aeropuerto {
     private Long id;
     private String nombre;
     private Ciudad ciudad;
-    private Set<Escala> escalas;
+    private Set<RutaEscala> escalas;
     private Set<SalidaAeropuerto> salidas;
 
     public Aeropuerto() {
     }
 
-    public Aeropuerto(Ciudad ciudad, Set<Escala> escalas, Long id, String nombre, Set<SalidaAeropuerto> salidas) {
+    public Aeropuerto(Ciudad ciudad, Set<RutaEscala> escalas, Long id, String nombre, Set<SalidaAeropuerto> salidas) {
         this.ciudad = ciudad;
         this.escalas = escalas;
         this.id = id;
@@ -48,11 +48,11 @@ public class Aeropuerto {
         this.ciudad = ciudad;
     }
 
-    public Set<Escala> getEscalas() {
+    public Set<RutaEscala> getEscalas() {
         return escalas;
     }
 
-    public void setEscalas(Set<Escala> escalas) {
+    public void setEscalas(Set<RutaEscala> escalas) {
         this.escalas = escalas;
     }
 

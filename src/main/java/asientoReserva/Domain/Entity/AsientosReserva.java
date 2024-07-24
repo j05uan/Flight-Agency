@@ -1,19 +1,19 @@
 package asientoReserva.Domain.Entity;
 
-import asiento.Domain.Entity.Asiento;
+import asientoAvion.domain.entity.AsientoAvion;
 import pasajero.Domain.entity.Pasajero;
 import reserva.Domain.entity.Reserva;
 
 public class AsientosReserva {
     private Long id;
     private Reserva reserva;
-    private Asiento asiento;
+    private AsientoAvion asiento;
     private Pasajero pasajero;
 
     public AsientosReserva() {
     }
 
-    public AsientosReserva(Asiento asiento, Long id, Pasajero pasajero, Reserva reserva) {
+    public AsientosReserva(AsientoAvion asiento, Long id, Pasajero pasajero, Reserva reserva) {
         this.asiento = asiento;
         this.id = id;
         this.pasajero = pasajero;
@@ -36,11 +36,11 @@ public class AsientosReserva {
         this.reserva = reserva;
     }
 
-    public Asiento getAsiento() {
+    public AsientoAvion getAsiento() {
         return asiento;
     }
 
-    public void setAsiento(Asiento asiento) {
+    public void setAsiento(AsientoAvion asiento) {
         this.asiento = asiento;
     }
 
