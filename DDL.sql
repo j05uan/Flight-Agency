@@ -65,6 +65,8 @@ CREATE TABLE aviones (
     fecha_fabricacion DATE,
     aerolinea_id INT,
     modelo_id INT,
+    filas, 
+    columnas,
     FOREIGN KEY (aerolinea_id) REFERENCES aerolineas(id),
     FOREIGN KEY (modelo_id) REFERENCES modelos(id)
 );
