@@ -15,7 +15,6 @@ public class Reserva {
     private Ruta ruta;
     private java.util.Date fecha;
     private Tarifa tarifa;
-    private java.math.BigDecimal valor;
     private Set<AsientosReserva> asientosReservas;
     public Reserva() {
     }
@@ -27,7 +26,6 @@ public class Reserva {
         this.id = id;
         this.ruta = ruta;
         this.tarifa = tarifa;
-        this.valor = valor;
     }
 
     public Long getId() {
@@ -68,14 +66,6 @@ public class Reserva {
 
     public void setTarifa(Tarifa tarifa) {
         this.tarifa = tarifa;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
     }
 
     public Set<AsientosReserva> getAsientosReservas() {
