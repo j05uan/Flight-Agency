@@ -1,9 +1,10 @@
+
 CREATE DATABASE railway;
 USE railway;
 
 CREATE TABLE paises (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL UNIQUE  -- Nombre del país
+    nombre VARCHAR(100) NOT NULL UNIQUE  
 );
 
 CREATE TABLE ciudades (
@@ -11,8 +12,9 @@ CREATE TABLE ciudades (
     nombre VARCHAR(100) NOT NULL,
     pais_id INT,
     FOREIGN KEY (pais_id) REFERENCES paises(id) ON DELETE CASCADE,
-    UNIQUE(nombre, pais_id)  -- Cada ciudad debe ser única en su país
+    UNIQUE(nombre, pais_id)  
 );
+
 
 CREATE TABLE aeropuertos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -21,32 +23,38 @@ CREATE TABLE aeropuertos (
     FOREIGN KEY (ciudad_id) REFERENCES ciudades(id) ON DELETE CASCADE
 );
 
+
 CREATE TABLE fabricantes (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL UNIQUE  -- Nombre del fabricante
+    nombre VARCHAR(100) NOT NULL UNIQUE 
 );
+
 
 CREATE TABLE modelos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL UNIQUE,  -- Nombre del modelo
+    nombre VARCHAR(100) NOT NULL UNIQUE,  
     fabricante_id INT,
     FOREIGN KEY (fabricante_id) REFERENCES fabricantes(id) ON DELETE SET NULL
 );
 
+
 CREATE TABLE aerolineas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL UNIQUE  -- Nombre de la aerolínea
+    nombre VARCHAR(100) NOT NULL UNIQUE  -
 );
+
 
 CREATE TABLE estados_avion (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    estado VARCHAR(50) NOT NULL UNIQUE  -- Estado del avión
+    estado VARCHAR(50) NOT NULL UNIQUE  
 );
+
 
 CREATE TABLE tipo_empleado (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    tipo VARCHAR(100) NOT NULL UNIQUE  -- Tipo de empleado (ej. Piloto, Azafata, Mecánico)
+    tipo VARCHAR(100) NOT NULL UNIQUE  
 );
+
 
 CREATE TABLE empleados (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -58,6 +66,7 @@ CREATE TABLE empleados (
     FOREIGN KEY (tipo_empleado_id) REFERENCES tipo_empleado(id)
 );
 
+
 CREATE TABLE aviones (
     id INT AUTO_INCREMENT PRIMARY KEY,
     matricula VARCHAR(50) NOT NULL UNIQUE,
@@ -65,11 +74,12 @@ CREATE TABLE aviones (
     fecha_fabricacion DATE,
     aerolinea_id INT,
     modelo_id INT,
-    filas, 
-    columnas,
+    filas INT,  
+    columnas INT,  
     FOREIGN KEY (aerolinea_id) REFERENCES aerolineas(id),
     FOREIGN KEY (modelo_id) REFERENCES modelos(id)
 );
+
 
 CREATE TABLE historial_estado (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -81,10 +91,12 @@ CREATE TABLE historial_estado (
     UNIQUE(avion_id, estado_avion_id, fecha_inicio)
 );
 
+
 CREATE TABLE tipos_documentos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    tipo VARCHAR(100) NOT NULL UNIQUE  -- Tipo de documento (ej. DNI, Pasaporte)
+    tipo VARCHAR(100) NOT NULL UNIQUE  
 );
+
 
 CREATE TABLE clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -95,10 +107,12 @@ CREATE TABLE clientes (
     FOREIGN KEY (tipo_documento_id) REFERENCES tipos_documentos(id)
 );
 
+
 CREATE TABLE tipo_tarifa (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    tipo VARCHAR(100) NOT NULL UNIQUE  -- Tipo de tarifa (ej. Económica, Ejecutiva)
+    tipo VARCHAR(100) NOT NULL UNIQUE 
 );
+
 
 CREATE TABLE tarifas (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -106,6 +120,7 @@ CREATE TABLE tarifas (
     valor DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (tipo_tarifa_id) REFERENCES tipo_tarifa(id)
 );
+
 
 CREATE TABLE salidas_aeropuerto (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -134,22 +149,20 @@ CREATE TABLE tarifasRutas (
 );
 
 
-
 CREATE TABLE RutaEscala (
     id INT AUTO_INCREMENT PRIMARY KEY,
     idAeropuertoOrigen INT,
     idAeropuertoDestino INT,
     idVuelo INT,
     idAvion INT,
-    horaLlegada VARCHAR(200),
-    horaSalida VARCHAR (200),
+    horaLlegada VARCHAR(100),  
+    horaSalida VARCHAR(100),  
     salidas_aeropuerto_id INT,
     FOREIGN KEY (idAvion) REFERENCES aviones(id),
     FOREIGN KEY (idAeropuertoOrigen) REFERENCES aeropuertos(id),
     FOREIGN KEY (idAeropuertoDestino) REFERENCES aeropuertos(id),
     FOREIGN KEY (idVuelo) REFERENCES rutas(id)
 );
-
 
 CREATE TABLE historial_tarifas (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -159,9 +172,10 @@ CREATE TABLE historial_tarifas (
     FOREIGN KEY (tarifa_id) REFERENCES tarifas(id)
 );
 
+
 CREATE TABLE rol_tripulante (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    rol VARCHAR(100) NOT NULL UNIQUE  -- Rol del tripulante (ej. Piloto, Copiloto)
+    rol VARCHAR(100) NOT NULL UNIQUE  
 );
 
 CREATE TABLE tripulacion_de_vuelo (
@@ -175,19 +189,18 @@ CREATE TABLE tripulacion_de_vuelo (
     UNIQUE(vuelo_id, empleado_id, rol_id)
 );
 
-
 CREATE TABLE asientos (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE asientosAvion (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     avion_id INT,
-    asieto_id INT,
+    asiento_id INT,
     columna VARCHAR(1),
     FOREIGN KEY (avion_id) REFERENCES aviones(id),
-    FOREIGN KEY (asieto_id) REFERENCES asientos(id)
+    FOREIGN KEY (asiento_id) REFERENCES asientos(id)
 );
 
 CREATE TABLE reservas (
@@ -202,7 +215,7 @@ CREATE TABLE reservas (
 );
 
 CREATE TABLE pasajeros (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT,
     nombre VARCHAR(50),
     apellido VARCHAR(50),
@@ -210,7 +223,7 @@ CREATE TABLE pasajeros (
 );
 
 CREATE TABLE asientos_reservas (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     reserva_id INT,
     asiento_id INT,
     pasajero_id INT,
@@ -221,13 +234,13 @@ CREATE TABLE asientos_reservas (
 );
 
 CREATE TABLE revision (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(200),
     descripcion TEXT
 );
 
 CREATE TABLE revisionMantenimiento (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     revision_id INT,
     empleado_id INT,
     fecha DATE,
@@ -235,4 +248,5 @@ CREATE TABLE revisionMantenimiento (
     FOREIGN KEY (empleado_id) REFERENCES empleados(id)
 );
 
-show tables;
+
+SHOW TABLES;

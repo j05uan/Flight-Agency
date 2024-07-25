@@ -8,7 +8,6 @@ import aerolinea.application.AerolineaUseCase;
 import static utils.Consola.cleanScreen;
 
 public class AerolineaControlador {
-
     private final Scanner scanner = new Scanner(System.in);
     private final AerolineaUseCase aerolineaUseCase;
 
