@@ -72,6 +72,10 @@ import salidaAeropuerto.Application.SalidaAeropuertoUseCase;
 import salidaAeropuerto.Domain.services.SalidaAeropuertoServices;
 import salidaAeropuerto.infraestructure.in.SalidaAeropuertoControlador;
 import salidaAeropuerto.infraestructure.out.SalidaAeropuertoRepository;
+import tarifa.Application.TarifaUseCase;
+import tarifa.Domain.services.TarifaServices;
+import tarifa.interfaces.in.TarifaControlador;
+import tarifa.interfaces.out.TarifaRepository;
 import tipoDocumento.Applicacion.TipoDocumentoUseCase;
 import tipoDocumento.Domain.services.TipoDocumentoServices;
 import tipoDocumento.infraestructure.in.TipoDocumentoControlador;
@@ -80,6 +84,10 @@ import tipoEmpleado.Application.TipoEmpleadoUseCase;
 import tipoEmpleado.Domain.services.TipoEmpleadoServices;
 import tipoEmpleado.infraestructure.in.TipoEmpleadoControlador;
 import tipoEmpleado.infraestructure.out.TipoEmpleadoRepository;
+import tipoTarifa.Application.TipoTarifaUseCase;
+import tipoTarifa.Domain.services.TipoTarifaServices;
+import tipoTarifa.infraestructure.in.TipoTarifaControlador;
+import tipoTarifa.infraestructure.out.TipoTarifaRepository;
 import static utils.Consola.cleanScreen;
 
 public class Main {
@@ -181,12 +189,20 @@ public class Main {
             PasajeroUseCase pasajeroUseCase = new PasajeroUseCase(pasajeroServices);
             PasajeroControlador pasajeroControlador = new PasajeroControlador(pasajeroUseCase, null);
 
+            //Tarifa
+            TarifaServices tarifaServices = new TarifaRepository();
+            TarifaUseCase tarifaUseCase = new TarifaUseCase(tarifaServices);
+            TarifaControlador tarifaControlador = new TarifaControlador(tarifaUseCase, null);
 
+            //Tipo Tarifa 
+            TipoTarifaServices tipoTarifaServices = new TipoTarifaRepository();
+            TipoTarifaUseCase tipoTarifaUseCase = new TipoTarifaUseCase(tipoTarifaServices);
+            TipoTarifaControlador tipoTarifaControlador = new TipoTarifaControlador(tipoTarifaUseCase);
             // Llama al método de inicio para mostrar el menú
 
             inicio(aerolineaControlador, ciudadControlador,aeropuertoControlador, paisControlador, asientoControlador, tipoEmpleadoControlador, empleadoControlador, fabricanteControlador, modeloControlador,
             avioncControlador, estadoAvionControlador, historialEstadoControlador,rolTripulanteControlador,clienteControlador, tipoDocumentoControlador, salidaAeropuertoControlador, rutaControlador,
-            rutaEscalaControlador, pasajeroControlador   );
+            rutaEscalaControlador, pasajeroControlador, tipoTarifaControlador, tarifaControlador   );
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -197,7 +213,7 @@ public class Main {
 
     private static void inicio(AerolineaControlador aerolineaControlador, CiudadControlador ciudadControlador,AeropuertoControlador aeropuertoControlador, PaisControlador paisControlador, AsientoControlador asientoControlador, TipoEmpleadoControlador tipoEmpleadoControlador, EmpleadoControlador empleadoControlador, FabricanteControlador fabricanteControlador,
         ModeloControlador modeloControlador, AvionControlador avioncControlador, EstadoAvionControlador estadoAvionControlador, HistorialEstadoControlador historialEstadoControlador, RolTripulanteControlador rolTripulanteControlador, ClienteControlador clienteControlador, TipoDocumentoControlador tipoDocumentoControlador, SalidaAeropuertoControlador salidaAeropuertoControlador,
-        RutaControlador rutaControlador, RutaEscalaControlador rutaEscalaControlador, PasajeroControlador pasajeroControlador
+        RutaControlador rutaControlador, RutaEscalaControlador rutaEscalaControlador, PasajeroControlador pasajeroControlador, TipoTarifaControlador tipoTarifaControlador, TarifaControlador tarifaControlador
             
         ) {
         try (Scanner scanner = new Scanner(System.in)) {
@@ -227,7 +243,7 @@ public class Main {
                             break;
                         case 3:
                             cleanScreen();
-                            mostrarMenuReservas(scanner);
+                            mostrarMenuReservas(scanner, tarifaControlador, tipoTarifaControlador,pasajeroControlador);
                             break;
                         case 4:
                             cleanScreen();
@@ -387,25 +403,30 @@ public class Main {
                             switch (opp) {
                                 case 1:
                                     cleanScreen();
-                                    tipoEmpleadoControlador.start();
+                                    fabricanteControlador.start();
+                                    
                                     break;
                                 case 2:
                                     cleanScreen();
-                                    empleadoControlador.start();
+                                    modeloControlador.start();
+
                                     break;
                                 case 3:
+                                    asientoControlador.start();
+
                                     cleanScreen();
-                                    estadoAvionControlador.start();
                                     break;
                                 case 4:
                                     cleanScreen();
-                                    fabricanteControlador.start();
+                                    estadoAvionControlador.start();
+
                                     break;
                                 case 5: 
                                     cleanScreen();
-                                    modeloControlador.start();
-                                case 6:
                                     avioncControlador.start();
+                                case 6:
+                                    cleanScreen();
+                                    historialEstadoControlador.start();
                                     break;
                                 case 7:
                                     cleanScreen();
@@ -435,11 +456,11 @@ public class Main {
                             switch (op2) {
                                 case 1:
                                     cleanScreen();
-                                    asientoControlador.start();
+                                    tipoEmpleadoControlador.start();
                                     break;
                                 case 2:
                                     cleanScreen();
-                                    historialEstadoControlador.start();
+                                    empleadoControlador.start();
                                     break;
                                 case 3:
                                     cleanScreen();
@@ -506,6 +527,7 @@ public class Main {
                                     break;
                                 case 3:
                                     cleanScreen();
+                                    
 
                                     break;
                                 default:
@@ -538,7 +560,7 @@ public class Main {
         }
     }
 
-    private static void mostrarMenuReservas(Scanner scanner) {
+    private static void mostrarMenuReservas(Scanner scanner, TarifaControlador tarifaControlador, TipoTarifaControlador tipoTarifaControlador, PasajeroControlador pasajeroControlador) {
         boolean salirMenuReservas = false;
 
         while (!salirMenuReservas) {
@@ -556,15 +578,15 @@ public class Main {
                 switch (seleccionReserva) {
                     case 1:
                         cleanScreen();
-                        // Implementar método para crear Reserva
+                        tipoTarifaControlador.start();
                         break;
                     case 2:
                         cleanScreen();
-                        // Implementar método para listar Reservas
+                        tarifaControlador.start();
                         break;
                     case 3:
                         cleanScreen();
-                        // Implementar método para actualizar Reserva
+                        pasajeroControlador.start();
                         break;
                     case 4:
                         cleanScreen();
