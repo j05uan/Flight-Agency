@@ -40,7 +40,7 @@ CREATE TABLE modelos (
 
 CREATE TABLE aerolineas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL UNIQUE  -
+    nombre VARCHAR(100) NOT NULL UNIQUE  
 );
 
 

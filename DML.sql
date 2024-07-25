@@ -151,12 +151,13 @@ INSERT INTO asientos (nombre) VALUES
     ('Clase Ejecutiva'),
     ('Clase Comercial');
 
-INSERT INTO asientosAvion (avion_id, asieto_id, columna) VALUES
+INSERT INTO asientosAvion (avion_id, asiento_id, columna) VALUES
     (1, 1, 'A'),  
     (1, 2, 'B'),  
     (2, 2, 'A'),  
     (2, 2, 'B'),  
     (1, 1, 'A');  
+ 
 
 INSERT INTO clientes (nombre, edad, tipo_documento_id, documento) VALUES
     ('Ana García', 30, 1, '12345678A'),
@@ -174,9 +175,9 @@ INSERT INTO pasajeros (cliente_id, nombre, apellido) VALUES
     (3, 'Elena', 'López');
     
 INSERT INTO asientos_reservas (reserva_id, asiento_id, pasajero_id) VALUES
-    (1, 1, 1),  -- Asiento A1 reservado por Ana García en vuelo AA1234
-    (2, 2, 2),  -- Asiento B2 reservado por Carlos Martínez en vuelo IB5678
-    (3, 1, 3);  -- Asiento A1 reservado por Elena López en vuelo AF9123
+    (1, 1, 1),  
+    (2, 2, 2),  
+    (3, 1, 3);  
 
 
 
