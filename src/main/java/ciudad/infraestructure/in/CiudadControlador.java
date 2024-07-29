@@ -10,13 +10,13 @@ import pais.Domain.Entity.Pais;
 
 public class CiudadControlador {
     private final CiudadUseCase ciudadUseCase;
-    private final PaisUseCase paisUseCase;
-    private final Scanner scanner;
+    private final PaisUseCase paisUseCase = new PaisUseCase(null) ;
+    private final Scanner scanner = new Scanner(System.in);
 
-    public CiudadControlador(CiudadUseCase ciudadUseCase, PaisUseCase paisUseCase, Scanner scanner) {
+   
+
+    public CiudadControlador(CiudadUseCase ciudadUseCase) {
         this.ciudadUseCase = ciudadUseCase;
-        this.paisUseCase = paisUseCase;
-        this.scanner = scanner;
     }
 
     public void start() {
@@ -25,7 +25,7 @@ public class CiudadControlador {
         while (!salir) {
             mostrarMenu();
             try {
-                int opcion = Integer.parseInt(scanner.nextLine());
+                int opcion = Integer.parseInt(scanner.nextLine().trim());
 
                 switch (opcion) {
                     case 1:
@@ -57,8 +57,9 @@ public class CiudadControlador {
                 System.out.println("Ha ocurrido un error: " + e.getMessage());
             }
         }
-
-        scanner.close();
+        
+        // Cierre del scanner si es creado internamente
+        // scanner.close();
     }
 
     private void mostrarMenu() {
@@ -74,36 +75,27 @@ public class CiudadControlador {
     private void crearCiudad() {
         System.out.println("--- Menú Crear Ciudad ---");
         System.out.print("Ingrese el nombre de la ciudad: ");
-        String nombre = scanner.nextLine();
+        String nombre = scanner.nextLine().trim();
+        if (nombre.isEmpty()) {
+            System.out.println("El nombre de la ciudad no puede estar vacío.");
+            return;
+        }
 
-        // Mostrar lista de países
         List<Pais> paises = paisUseCase.obtenerTodosLosPaises();
         if (paises.isEmpty()) {
             System.out.println("No hay países disponibles. Cree al menos un país antes de crear una ciudad.");
             return;
         }
 
-        System.out.println("Seleccione un país:");
-        for (int i = 0; i < paises.size(); i++) {
-            System.out.println((i + 1) + ". " + paises.get(i));
-        }
+        Pais paisSeleccionado = seleccionarPais(paises);
 
-        // Selección del país
-        int paisIndex = Integer.parseInt(scanner.nextLine()) - 1;
-        if (paisIndex < 0 || paisIndex >= paises.size()) {
-            System.out.println("Opción no válida.");
-            return;
-        }
-
-        Pais paisSeleccionado = paises.get(paisIndex);
-
-        // Generar ID de manera adecuada
         Long id = ciudadUseCase.obtenerTodasLasCiudades().stream()
                 .map(Ciudad::getId)
                 .max(Long::compareTo)
                 .orElse(0L) + 1;
 
         Ciudad ciudad = new Ciudad();
+        ciudad.setId(id);
         ciudad.setNombre(nombre);
         ciudad.setPais(paisSeleccionado);
         ciudadUseCase.crearCiudad(ciudad);
@@ -123,61 +115,86 @@ public class CiudadControlador {
     private void obtenerCiudadPorId() {
         System.out.println("--- Menú Obtener Ciudad por ID ---");
         System.out.print("Ingrese el ID de la ciudad: ");
-        try {
-            Long id = Long.parseLong(scanner.nextLine());
-            Ciudad ciudad = ciudadUseCase.obtenerCiudadPorId(id);
-            if (ciudad != null) {
-                System.out.println(ciudad);
-            } else {
-                System.out.println("Ciudad no encontrada.");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("ID inválido. Por favor, ingrese un número entero.");
+        Long id = leerLong();
+        if (id == null) return;
+
+        Ciudad ciudad = ciudadUseCase.obtenerCiudadPorId(id);
+        if (ciudad != null) {
+            System.out.println(ciudad);
+        } else {
+            System.out.println("Ciudad no encontrada.");
         }
     }
 
     private void actualizarCiudad() {
         System.out.println("--- Menú Actualizar Ciudad ---");
         System.out.print("Ingrese el ID de la ciudad que desea actualizar: ");
-        try {
-            Long id = Long.parseLong(scanner.nextLine());
-            Ciudad ciudad = ciudadUseCase.obtenerCiudadPorId(id);
-            if (ciudad != null) {
-                System.out.print("Ingrese el nuevo nombre de la ciudad: ");
-                String nuevoNombre = scanner.nextLine();
-                // Mostrar lista de países
-                List<Pais> paises = paisUseCase.obtenerTodosLosPaises();
-                System.out.println("Seleccione un nuevo país:");
-                for (int i = 0; i < paises.size(); i++) {
-                    System.out.println((i + 1) + ". " + paises.get(i));
-                }
-                int paisIndex = Integer.parseInt(scanner.nextLine()) - 1;
-                if (paisIndex < 0 || paisIndex >= paises.size()) {
-                    System.out.println("Opción no válida.");
-                    return;
-                }
-                Pais nuevoPais = paises.get(paisIndex);
-                ciudad.setNombre(nuevoNombre);
-                ciudad.setPais(nuevoPais);
-                ciudadUseCase.actualizarCiudad(ciudad);
-                System.out.println("Ciudad actualizada con éxito.");
-            } else {
-                System.out.println("Ciudad no encontrada.");
+        Long id = leerLong();
+        if (id == null) return;
+
+        Ciudad ciudad = ciudadUseCase.obtenerCiudadPorId(id);
+        if (ciudad != null) {
+            System.out.print("Ingrese el nuevo nombre de la ciudad: ");
+            String nuevoNombre = scanner.nextLine().trim();
+            if (nuevoNombre.isEmpty()) {
+                System.out.println("El nombre de la ciudad no puede estar vacío.");
+                return;
             }
-        } catch (NumberFormatException e) {
-            System.out.println("ID inválido. Por favor, ingrese un número entero.");
+
+            Pais nuevoPais = seleccionarPais(paisUseCase.obtenerTodosLosPaises());
+            ciudad.setNombre(nuevoNombre);
+            ciudad.setPais(nuevoPais);
+            ciudadUseCase.actualizarCiudad(ciudad);
+            System.out.println("Ciudad actualizada con éxito.");
+        } else {
+            System.out.println("Ciudad no encontrada.");
         }
     }
 
     private void eliminarCiudad() {
         System.out.println("--- Menú Eliminar Ciudad ---");
         System.out.print("Ingrese el ID de la ciudad que desea eliminar: ");
-        try {
-            Long id = Long.parseLong(scanner.nextLine());
+        Long id = leerLong();
+        if (id == null) return;
+
+        Ciudad ciudad = ciudadUseCase.obtenerCiudadPorId(id);
+        if (ciudad != null) {
             ciudadUseCase.eliminarCiudad(id);
             System.out.println("Ciudad eliminada con éxito.");
+        } else {
+            System.out.println("Ciudad no encontrada.");
+        }
+    }
+
+    private Pais seleccionarPais(List<Pais> paises) {
+        System.out.println("Seleccione un país:");
+        for (int i = 0; i < paises.size(); i++) {
+            System.out.println((i + 1) + ". " + paises.get(i).getNombre()); // Usa getNombre() o asegúrate de que toString() esté bien implementado
+        }
+
+        int paisIndex;
+        try {
+            paisIndex = Integer.parseInt(scanner.nextLine().trim()) - 1;
+            if (paisIndex < 0 || paisIndex >= paises.size()) {
+                throw new IndexOutOfBoundsException("Índice de país fuera de rango.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Entrada inválida. Por favor, ingrese un número entero.");
+            return null;
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Opción no válida. " + e.getMessage());
+            return null;
+        }
+
+        return paises.get(paisIndex);
+    }
+
+    private Long leerLong() {
+        try {
+            return Long.parseLong(scanner.nextLine().trim());
         } catch (NumberFormatException e) {
             System.out.println("ID inválido. Por favor, ingrese un número entero.");
+            return null;
         }
     }
 }

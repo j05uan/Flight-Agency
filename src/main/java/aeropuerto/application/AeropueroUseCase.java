@@ -27,4 +27,12 @@ public class AeropueroUseCase {
     public Aeropuerto obtenerAeropuertoPorId( Long id){
         return aeropuertoServices.obtenerAeropuertoPorId(id);
     }
+
+    public void actualizarAeropuerto(Aeropuerto aeropuerto){
+        aeropuertoServices.actualizarAeropuerto(aeropuerto);
+    }
+
+    public void eliminarAeropuerto (Long id){
+        aeropuertoServices.elimnarAeropuerto(id);
+    }
 }

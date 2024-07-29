@@ -13,31 +13,26 @@ import static utils.Consola.cleanScreen;
 
 public class AeropuertoControlador {
 
-    private AeropueroUseCase aeropueroUseCase;
-    private ActualizarAeropuerto actualizarAeropuerto;
-    private EliminarAeropuertoUseCase eliminarAeropuertoUseCase;
-    private CiudadRepository ciudadRepository = new CiudadRepository();
-    private Scanner scanner;
+    private final AeropueroUseCase aeropueroUseCase;
+    private final ActualizarAeropuerto actualizarAeropuerto = new ActualizarAeropuerto(null); 
+    private final EliminarAeropuertoUseCase eliminarAeropuertoUseCase = new EliminarAeropuertoUseCase(null);
 
-    public AeropuertoControlador(ActualizarAeropuerto actualizarAeropuerto, AeropueroUseCase aeropueroUseCase, EliminarAeropuertoUseCase eliminarAeropuertoUseCase) {
-        this.actualizarAeropuerto = actualizarAeropuerto;
+   
+    private final Scanner scanner = new Scanner(System.in);
+    
+    
+
+    public AeropuertoControlador(AeropueroUseCase aeropueroUseCase) {
         this.aeropueroUseCase = aeropueroUseCase;
-        this.eliminarAeropuertoUseCase = eliminarAeropuertoUseCase;
-        this.scanner = new Scanner(System.in);
     }
 
     public void start() {
         boolean salir = false;
 
         while (!salir) {
-            System.out.println("Seleccione la opción:");
-            System.out.println("1. Crear Aeropuerto");
-            System.out.println("2. Actualizar Aeropuerto");
-            System.out.println("3. Eliminar Aeropuerto");
-            System.out.println("4. Salir");
-
+            mostrarMenuAeropuerto();
             try {
-                int opcion = Integer.parseInt(scanner.nextLine());
+                int opcion = Integer.parseInt(scanner.nextLine().trim());
 
                 switch (opcion) {
                     case 1:
@@ -57,7 +52,7 @@ public class AeropuertoControlador {
                         System.out.println("Saliendo del sistema...");
                         break;
                     default:
-                        System.out.println("Opción no válida. Por favor, elija una opción entre 1 y 5.");
+                        System.out.println("Opción no válida. Por favor, elija una opción entre 1 y 4.");
                 }
 
             } catch (NumberFormatException e) {
@@ -67,27 +62,45 @@ public class AeropuertoControlador {
             }
         }
 
-        scanner.close();
+        // Consider removing scanner close here if you plan to use it elsewhere
+        // scanner.close(); 
+    }
+
+    private void mostrarMenuAeropuerto() {
+        System.out.println("--- Menú Aeropuerto ---");
+        System.out.println("Seleccione una opción:");
+        System.out.println("1. Crear Aeropuerto");
+        System.out.println("2. Actualizar Aeropuerto");
+        System.out.println("3. Eliminar Aeropuerto");
+        System.out.println("4. Salir");
     }
 
     private void crearAeropuerto() {
         System.out.println("--- Menú Crear Aeropuerto ---");
-        System.out.println("Ingrese el nombre del aeropuerto:");
-        String nombre = scanner.nextLine();
+        System.out.print("Ingrese el nombre del aeropuerto: ");
+        String nombre = scanner.nextLine().trim();
 
-        // Obtener la lista de ciudades disponibles
-        List<Ciudad> ciudades = ciudadRepository.obtenerTodasLasCiudades();
+        if (nombre.isEmpty()) {
+            System.out.println("El nombre del aeropuerto no puede estar vacío.");
+            return;
+        }
 
-        // Mostrar las ciudades disponibles para que el usuario elija
+        List<Ciudad> ciudades = new CiudadRepository().obtenerTodasLasCiudades();
+
         System.out.println("Seleccione la ciudad para el aeropuerto:");
         for (Ciudad ciudad : ciudades) {
             System.out.println(ciudad.getId() + " | " + ciudad.getNombre());
         }
 
-        System.out.println("Ingrese el ID de la ciudad:");
-        Long ciudadId = Long.parseLong(scanner.nextLine());
+        System.out.print("Ingrese el ID de la ciudad: ");
+        Long ciudadId;
+        try {
+            ciudadId = Long.parseLong(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("ID de ciudad inválido. Por favor, ingrese un número entero.");
+            return;
+        }
 
-        // Buscar la ciudad seleccionada por el usuario
         Ciudad ciudadSeleccionada = ciudades.stream()
             .filter(ciudad -> ciudad.getId().equals(ciudadId))
             .findFirst()
@@ -98,32 +111,49 @@ public class AeropuertoControlador {
             return;
         }
 
-        // Crear el aeropuerto
         Aeropuerto aeropuerto = new Aeropuerto();
         aeropuerto.setNombre(nombre);
         aeropuerto.setCiudad(ciudadSeleccionada);
         aeropueroUseCase.crearAeropuerto(aeropuerto);
+
         System.out.println("Aeropuerto creado con éxito.");
     }
 
     private void actualizarAeropuerto() {
         System.out.println("--- Menú Actualizar Aeropuerto ---");
         System.out.println("Ingrese el ID del aeropuerto que desea actualizar:");
-        int id = Integer.parseInt(scanner.nextLine());
-
-        List<Aeropuerto> aeropuertoExistente = aeropueroUseCase.obtenerTodosLosAeropuertos();
-
-        System.out.println("Ingrese el nuevo nombre del aeropuerto:");
-        String nuevoNombre = scanner.nextLine();
-        System.out.println("Ingrese el ID de la ciudad:");
-        Long ciudadId = Long.parseLong(scanner.nextLine());
-
-        // Buscar la ciudad seleccionada por el usuario
-        List<Ciudad> ciudades = ciudadRepository.obtenerTodasLasCiudades();
-
-        for (Ciudad ciudad : ciudades) {
-            System.out.println(ciudad.getId() + " | " + ciudad.getNombre());
+        Long id;
+        try {
+            id = Long.parseLong(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("ID inválido. Por favor, ingrese un número entero.");
+            return;
         }
+
+        Aeropuerto aeropuertoExistente = aeropueroUseCase.obtenerAeropuertoPorId(id);
+        if (aeropuertoExistente == null) {
+            System.out.println("Aeropuerto no encontrado.");
+            return;
+        }
+
+        System.out.print("Ingrese el nuevo nombre del aeropuerto: ");
+        String nuevoNombre = scanner.nextLine().trim();
+
+        if (nuevoNombre.isEmpty()) {
+            System.out.println("El nombre del aeropuerto no puede estar vacío.");
+            return;
+        }
+
+        System.out.println("Ingrese el ID de la ciudad:");
+        Long ciudadId;
+        try {
+            ciudadId = Long.parseLong(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("ID de ciudad inválido. Por favor, ingrese un número entero.");
+            return;
+        }
+
+        List<Ciudad> ciudades = new CiudadRepository().obtenerTodasLasCiudades();
         Ciudad ciudadSeleccionada = ciudades.stream()
             .filter(ciudad -> ciudad.getId().equals(ciudadId))
             .findFirst()
@@ -133,10 +163,12 @@ public class AeropuertoControlador {
             System.out.println("Ciudad no encontrada.");
             return;
         }
+
         try {
-            Aeropuerto aeropuerto = new Aeropuerto();
-            aeropuerto.setNombre(nuevoNombre);
-            aeropuerto.setCiudad(ciudadSeleccionada);
+            aeropuertoExistente.setNombre(nuevoNombre);
+            aeropuertoExistente.setCiudad(ciudadSeleccionada);
+            aeropueroUseCase.actualizarAeropuerto(aeropuertoExistente);
+
             System.out.println("Aeropuerto actualizado con éxito.");
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error: " + e.getMessage());
@@ -145,34 +177,20 @@ public class AeropuertoControlador {
 
     private void eliminarAeropuerto() {
         System.out.println("--- Menú Eliminar Aeropuerto ---");
-        System.out.println("Ingrese el ID del aeropuerto que desea eliminar:");
-        Long id = Long.parseLong(scanner.nextLine());
+        System.out.print("Ingrese el ID del aeropuerto que desea eliminar: ");
+        Long id;
+        try {
+            id = Long.parseLong(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("ID inválido. Por favor, ingrese un número entero.");
+            return;
+        }
 
         try {
-            eliminarAeropuertoUseCase.execute(id);
+            aeropueroUseCase.eliminarAeropuerto(id);
             System.out.println("Aeropuerto eliminado con éxito.");
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error: " + e.getMessage());
         }
     }
-
-//     private void encontrarAeropuerto() {
-//         System.out.println("--- Menú Encontrar Aeropuerto ---");
-//         System.out.println("Ingrese el ID del aeropuerto que desea encontrar:");
-//         Long id = Long.parseLong(scanner.nextLine());
-
-//         try {
-//             Aeropuerto aeropuerto = encontrarAeropuertoUseCase.executed(id);
-//             if (aeropuerto != null) {
-//                 System.out.println("Detalles del Aeropuerto:");
-//                 System.out.println("ID: " + aeropuerto.getId());
-//                 System.out.println("Nombre: " + aeropuerto.getNombre());
-//                 System.out.println("Ciudad: " + aeropuerto.getCiudad().getNombre());
-//             } else {
-//                 System.out.println("Aeropuerto no encontrado.");
-//             }
-//         } catch (Exception e) {
-//             System.out.println("Ha ocurrido un error: " + e.getMessage());
-//         }
-//     }
 }

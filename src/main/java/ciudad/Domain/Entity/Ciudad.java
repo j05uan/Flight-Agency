@@ -46,5 +46,8 @@ public class Ciudad {
         this.aeropuertos = aeropuertos;
     }
 
+    public String toString() {
+        return String.format("ID: %d, Nombre: %s, País: %s", id, nombre, pais != null ? pais.getNombre() : "No asignado");
+    }
 
 }

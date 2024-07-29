@@ -50,13 +50,14 @@ public class AeropuertoRepository implements AeropuertoServices{
 
     @Override
     public void actualizarAeropuerto(Aeropuerto aeropuerto) {
-        String sql =" UPDATE aeropuertos SET mombre = ? ciudad_id= ? ";
+        String sql =" UPDATE aeropuertos SET mombre = ? ciudad_id= ? WHERE id = ? ";
 
         try (Connection connection = ConfiguracionBaseDeDatos.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
 
                 statement.setString(1, aeropuerto.getNombre());
                 statement.setLong(2, aeropuerto.getCiudad().getId());
+                statement.setLong(3, aeropuerto.getId().intValue());
 
             statement.executeUpdate();
 

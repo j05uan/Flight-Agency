@@ -7,22 +7,15 @@ import aeropuerto.domain.entity.Aeropuerto;
 import aeropuerto.infraestructure.out.AeropuertoRepository;
 import salidaAeropuerto.Application.SalidaAeropuertoUseCase;
 import salidaAeropuerto.Domain.entity.SalidaAeropuerto;
-import salidaAeropuerto.infraestructure.out.SalidaAeropuertoRepository;
 import utils.Consola;
 import static utils.Consola.cleanScreen;
 
 public class SalidaAeropuertoControlador {
     private final Scanner scanner = new Scanner(System.in);
     private final SalidaAeropuertoUseCase salidaAeropuertoUseCase;
-    private final SalidaAeropuertoRepository salidaAeropuertoRepo;
-    private final AeropuertoRepository aeropuertoRepo;
 
-    public SalidaAeropuertoControlador(SalidaAeropuertoUseCase salidaAeropuertoUseCase,
-                                       SalidaAeropuertoRepository salidaAeropuertoRepo, 
-                                       AeropuertoRepository aeropuertoRepo) {
+    public SalidaAeropuertoControlador(SalidaAeropuertoUseCase salidaAeropuertoUseCase) {
         this.salidaAeropuertoUseCase = salidaAeropuertoUseCase;
-        this.salidaAeropuertoRepo = salidaAeropuertoRepo;
-        this.aeropuertoRepo = aeropuertoRepo;
     }
 
     public void start() {
@@ -80,7 +73,7 @@ public class SalidaAeropuertoControlador {
         System.out.println("Ingrese el nombre de la Salida Aeropuerto:");
         String salidaAeropuerto = scanner.nextLine();
 
-        List<Aeropuerto> aeropuertos = aeropuertoRepo.obtenerTodosLosAeropuertos();
+        List<Aeropuerto> aeropuertos = new AeropuertoRepository().obtenerTodosLosAeropuertos();
         System.out.println("Seleccione el aeropuerto:");
         mostrarAeropuerto(aeropuertos);
         int opcionAeropuerto = Consola.optionValidation("Ingrese el id del aeropuerto", 1, aeropuertos.size());
@@ -90,12 +83,12 @@ public class SalidaAeropuertoControlador {
         nuevaSalida.setAeropuerto(aeropuertoSeleccionado);
         nuevaSalida.setSalidaAeropuerto(salidaAeropuerto);
 
-        salidaAeropuertoRepo.crearSalidaAeropuerto(nuevaSalida);
+        salidaAeropuertoUseCase.crearSalidaAeropuerto(nuevaSalida);
         System.out.println("Salida Aeropuerto Creada");
     }
 
     private void listarTodosLasSalidasAeropuerto() {
-        List<SalidaAeropuerto> salidas = salidaAeropuertoRepo.obtenerTodosAeropuertoSalidas();
+        List<SalidaAeropuerto> salidas = salidaAeropuertoUseCase.obtenerTodosAeropuertoSalidas();
         if (salidas.isEmpty()) {
             System.out.println("No hay salidas de aeropuerto registradas.");
         } else {
@@ -112,7 +105,7 @@ public class SalidaAeropuertoControlador {
         System.out.println("Ingrese el ID de la Salida Aeropuerto:");
         Long id = scanner.nextLong();
 
-        SalidaAeropuerto salida = salidaAeropuertoRepo.obtenerSalidaAeropuertoPorId(id);
+        SalidaAeropuerto salida = salidaAeropuertoUseCase.obtenerSalidaAeropuertoPorId(id);
         if (salida != null) {
             System.out.printf("ID: %d, Aeropuerto: %s, Salida: %s%n",
                     salida.getId(),
@@ -126,20 +119,20 @@ public class SalidaAeropuertoControlador {
     private void actualizarSalidaAeropuerto() {
         System.out.println("Ingrese el ID de la Salida Aeropuerto:");
         Long id = scanner.nextLong();
-        SalidaAeropuerto salida = salidaAeropuertoRepo.obtenerSalidaAeropuertoPorId(id);
+        SalidaAeropuerto salida = salidaAeropuertoUseCase.obtenerSalidaAeropuertoPorId(id);
         if (salida != null) {
             System.out.println("Ingrese el nuevo nombre de la Salida Aeropuerto:");
             String nuevoNombre = scanner.nextLine();
             salida.setSalidaAeropuerto(nuevoNombre);
 
-            List<Aeropuerto> aeropuertos = aeropuertoRepo.obtenerTodosLosAeropuertos();
+            List<Aeropuerto> aeropuertos = new AeropuertoRepository().obtenerTodosLosAeropuertos();
             System.out.println("Seleccione el nuevo aeropuerto:");
             mostrarAeropuerto(aeropuertos);
             int opcionAeropuerto = Consola.optionValidation("Ingrese el id del nuevo aeropuerto", 1, aeropuertos.size());
             Aeropuerto nuevoAeropuerto = aeropuertos.get(opcionAeropuerto - 1);
             salida.setAeropuerto(nuevoAeropuerto);
 
-            salidaAeropuertoRepo.actualizarSalidaAeropuerto(salida);
+            salidaAeropuertoUseCase.actualizarSalidaAeropuerto(salida);
             System.out.println("Salida Aeropuerto Actualizada");
         } else {
             System.out.println("No se encontró una salida de aeropuerto con el ID proporcionado.");
@@ -149,9 +142,9 @@ public class SalidaAeropuertoControlador {
     private void eliminarSalidaAeropuerto() {
         System.out.println("Ingrese el ID de la Salida Aeropuerto:");
         Long id = scanner.nextLong();
-        SalidaAeropuerto salida = salidaAeropuertoRepo.obtenerSalidaAeropuertoPorId(id);
+        SalidaAeropuerto salida = salidaAeropuertoUseCase.obtenerSalidaAeropuertoPorId(id);
         if (salida != null) {
-            salidaAeropuertoRepo.eliminarSalidaAeropuerto(id);
+            salidaAeropuertoUseCase.eliminarSalidaAeropuerto(id);
             System.out.println("Salida Aeropuerto Eliminada");
         } else {
             System.out.println("No se encontró una salida de aeropuerto con el ID proporcionado.");

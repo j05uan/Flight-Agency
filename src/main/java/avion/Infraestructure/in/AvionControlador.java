@@ -17,16 +17,11 @@ import static utils.Consola.cleanScreen;
 public class AvionControlador {
     private final Scanner scanner = new Scanner(System.in);
     private final AvionUseCase avionUseCase;
-    private final AvionRepository avionRepo;
-    private final AerolineaRepository aerolineaRepo;
-    private final ModeloRepository modeloRepo;
+    
 
-    public AvionControlador(AvionUseCase avionUseCase, AvionRepository avionRepo,
-                            AerolineaRepository aerolineaRepo, ModeloRepository modeloRepo) {
+    
+    public AvionControlador(AvionUseCase avionUseCase) {
         this.avionUseCase = avionUseCase;
-        this.avionRepo = avionRepo;
-        this.aerolineaRepo = aerolineaRepo;
-        this.modeloRepo = modeloRepo;
     }
 
     public void start() {
@@ -82,39 +77,89 @@ public class AvionControlador {
 
     public void crearAvion() {
         System.out.println("----- Crear Avión -----");
-
-        System.out.println("Ingrese la matrícula del avión:");
-        String matricula = scanner.nextLine();
-
-        System.out.println("Ingrese la capacidad del avión:");
-        int capacidad = scanner.nextInt();
-        scanner.nextLine(); // Consumir el salto de línea después de nextInt
-
+    
+        // Obtener la matrícula del avión
+        System.out.print("Ingrese la matrícula del avión: ");
+        String matricula = scanner.nextLine().trim();
+    
+        // Obtener la capacidad del avión
+        int capacidad;
+        try {
+            System.out.print("Ingrese la capacidad del avión: ");
+            capacidad = Integer.parseInt(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("Capacidad inválida. Debe ser un número entero.");
+            return;
+        }
+    
+        
+        int filas;
+        try {
+            System.out.print("Ingrese el número de filas del avión: ");
+            filas = Integer.parseInt(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("Número de filas inválido. Debe ser un número entero.");
+            return;
+        }
+    
+        // Obtener el número de columnas del avión
+        int columnas;
+        try {
+            System.out.print("Ingrese el número de columnas de asientos del avión: ");
+            columnas = Integer.parseInt(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("Número de columnas inválido. Debe ser un número entero.");
+            return;
+        }
+    
+        
+        if (filas * columnas != capacidad) {
+            System.out.println("La capacidad no coincide con el número de asientos y filas.");
+            System.out.println("Vuelve a intentarlo.");
+            return;  // Salir del método en caso de error
+        }
+    
+        
         Date fechaDeFabricacion = Consola.obtenerFechaDeFabricacion();
-
-        List<Aerolinea> aerolineas = aerolineaRepo.obtenerTodasLasAerolineas();
+    
+       
+        List<Aerolinea> aerolineas = new AerolineaRepository().obtenerTodasLasAerolineas();
+        if (aerolineas.isEmpty()) {
+            System.out.println("No hay aerolíneas disponibles.");
+            return;
+        }
         System.out.println("Seleccione una aerolínea:");
         mostrarAerolineas(aerolineas);
         int opcionAerolinea = Consola.optionValidation("Ingrese el número de la aerolínea: ", 1, aerolineas.size());
         Aerolinea aerolineaSeleccionada = aerolineas.get(opcionAerolinea - 1);
-
-        List<Modelo> modelos = modeloRepo.obtenerTodosLosModelos();
+    
+    
+        List<Modelo> modelos = new ModeloRepository().obtenerTodosLosModelos();
+        if (modelos.isEmpty()) {
+            System.out.println("No hay modelos disponibles.");
+            return;
+        }
         System.out.println("Seleccione un modelo:");
         mostrarModelos(modelos);
         int opcionModelo = Consola.optionValidation("Ingrese el número del modelo: ", 1, modelos.size());
         Modelo modeloSeleccionado = modelos.get(opcionModelo - 1);
-
+    
+        
         Avion nuevoAvion = new Avion();
         nuevoAvion.setMatricula(matricula);
         nuevoAvion.setCapacidad(capacidad);
         nuevoAvion.setFechaFabricacion(fechaDeFabricacion);
         nuevoAvion.setAerolinea(aerolineaSeleccionada);
         nuevoAvion.setModelo(modeloSeleccionado);
-
+        nuevoAvion.setColumnas(columnas);
+        nuevoAvion.setFilas(filas);
+    
+        AvionRepository avionRepo = new AvionRepository();
         avionRepo.CrearAvion(nuevoAvion);
-
+    
         System.out.println("Avión creado con éxito. ID del avión: " + nuevoAvion.getId());
     }
+    
 
     public void obtenerTodosLosAviones() {
         System.out.println("---- Listado de Aviones ----");
@@ -173,13 +218,13 @@ public class AvionControlador {
 
             Date nuevaFechaFabricacion = Consola.obtenerFechaDeFabricacion();
 
-            List<Aerolinea> aerolineas = aerolineaRepo.obtenerTodasLasAerolineas();
+            List<Aerolinea> aerolineas = new AerolineaRepository().obtenerTodasLasAerolineas();
             System.out.println("Seleccione una aerolínea:");
             mostrarAerolineas(aerolineas);
             int opcionAerolinea = Consola.optionValidation("Ingrese el número de la aerolínea: ", 1, aerolineas.size());
             Aerolinea aerolineaSeleccionada = aerolineas.get(opcionAerolinea - 1);
 
-            List<Modelo> modelos = modeloRepo.obtenerTodosLosModelos();
+            List<Modelo> modelos = new ModeloRepository().obtenerTodosLosModelos();
             System.out.println("Seleccione un modelo:");
             mostrarModelos(modelos);
             int opcionModelo = Consola.optionValidation("Ingrese el número del modelo: ", 1, modelos.size());

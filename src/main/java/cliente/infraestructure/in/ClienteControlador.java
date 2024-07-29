@@ -12,52 +12,57 @@ import utils.Consola;
 import static utils.Consola.cleanScreen;
 
 public class ClienteControlador {
-    private final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner;
     private final ClienteUseCase clienteUseCase;
     private final ClienteRepository clienteRepo;
     private final TipoDocumentoRepository tipoDocumentoRepo;
 
     public ClienteControlador(ClienteRepository clienteRepo, ClienteUseCase clienteUseCase, TipoDocumentoRepository tipoDocumentoRepo) {
+        this.scanner = new Scanner(System.in);  // Reinstanciamos el Scanner aquí
         this.clienteRepo = clienteRepo;
         this.clienteUseCase = clienteUseCase;
         this.tipoDocumentoRepo = tipoDocumentoRepo;
     }
 
     public void start() {
-        int opcion;
+        int opcion= 0;
 
         do {
             mostrarMenu();
-            opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea
+            try {
+                opcion = Integer.parseInt(scanner.nextLine().trim());
 
-            switch (opcion) {
-                case 1:
-                    cleanScreen();
-                    CrearCliente();
-                    break;
-                case 2:
-                    cleanScreen();
-                    obtenerTodosLosClientes();
-                    break;
-                case 3:
-                    cleanScreen();
-                    obtenerClientePorId();
-                    break;
-                case 4:
-                    cleanScreen();
-                    actualizarCliente();
-                    break;
-                case 5:
-                    cleanScreen();
-                    eliminarCliente();
-                    break;
-                case 6:
-                    System.out.println("Saliendo del programa...");
-                    break;
-                default:
-                    System.out.println("Opción no válida. Por favor, intente de nuevo.");
-                    break;
+                switch (opcion) {
+                    case 1:
+                        cleanScreen();
+                        CrearCliente();
+                        break;
+                    case 2:
+                        cleanScreen();
+                        obtenerTodosLosClientes();
+                        break;
+                    case 3:
+                        cleanScreen();
+                        obtenerClientePorId();
+                        break;
+                    case 4:
+                        cleanScreen();
+                        actualizarCliente();
+                        break;
+                    case 5:
+                        cleanScreen();
+                        eliminarCliente();
+                        break;
+                    case 6:
+                        System.out.println("Saliendo del programa...");
+                        break;
+                    default:
+                        System.out.println("Opción no válida. Por favor, intente de nuevo.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida. Por favor, ingrese un número entero.");
+            } catch (Exception e) {
+                System.out.println("Ha ocurrido un error: " + e.getMessage());
             }
         } while (opcion != 6);
     }
@@ -70,37 +75,43 @@ public class ClienteControlador {
         System.out.println("4. Actualizar Cliente");
         System.out.println("5. Eliminar Cliente");
         System.out.println("6. Salir");
-        System.out.println("Seleccione una opción:");
+        System.out.print("Seleccione una opción: ");
     }
 
-    public void CrearCliente() {
+    private void CrearCliente() {
         System.out.println("---- Crear Cliente ----");
-        System.out.println("Ingrese el nombre del Cliente:");
-        String nombre = scanner.nextLine();
+        System.out.print("Ingrese el nombre del Cliente: ");
+        String nombre = scanner.nextLine().trim();
 
-        System.out.println("Ingrese la edad del Cliente:");
-        int edad = scanner.nextInt();
-        scanner.nextLine(); // Consumir el salto de línea
+        System.out.print("Ingrese la edad del Cliente: ");
+        int edad;
+        try {
+            edad = Integer.parseInt(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("Edad inválida. Debe ser un número entero.");
+            return;
+        }
 
         List<TipoDocumento> tipoDocumentos = tipoDocumentoRepo.obtenerTodosLosTiposDocumento();
         System.out.println("Seleccione el tipo de Documento:");
         mostrarTipoDocumentos(tipoDocumentos);
         int opcionTipoDocumento = Consola.optionValidation("Ingrese la opción: ", 1, tipoDocumentos.size());
         TipoDocumento documentoSeleccionado = tipoDocumentos.get(opcionTipoDocumento - 1);
-        System.out.println("Ingrese el documento:");
-        String documento = scanner.nextLine();
+
+        System.out.print("Ingrese el documento: ");
+        String documento = scanner.nextLine().trim();
 
         Cliente cliente = new Cliente();
         cliente.setNombre(nombre);
         cliente.setEdad(edad);
         cliente.setTipoDocumento(documentoSeleccionado);
         cliente.setDocumento(documento);
-        
+
         clienteUseCase.CrearCliente(cliente);
         System.out.println("Cliente creado con éxito. ID del cliente: " + cliente.getId());
     }
 
-    public void obtenerTodosLosClientes() {
+    private void obtenerTodosLosClientes() {
         System.out.println("---- Listado de Clientes ----");
 
         List<Cliente> clientes = clienteUseCase.obtenerTodosLosClientes();
@@ -116,11 +127,16 @@ public class ClienteControlador {
         }
     }
 
-    public void obtenerClientePorId() {
+    private void obtenerClientePorId() {
         System.out.println("---- Buscar Cliente por ID ----");
-        System.out.println("Ingrese el ID del Cliente:");
-        Long id = scanner.nextLong();
-        scanner.nextLine();  // Consumir el salto de línea después de nextLong
+        System.out.print("Ingrese el ID del Cliente: ");
+        Long id;
+        try {
+            id = Long.parseLong(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("ID inválido. Debe ser un número entero.");
+            return;
+        }
 
         Cliente cliente = clienteUseCase.obtenerClientePorId(id);
 
@@ -133,11 +149,16 @@ public class ClienteControlador {
         }
     }
 
-    public void actualizarCliente() {
+    private void actualizarCliente() {
         System.out.println("---- Actualizar Cliente ----");
-        System.out.println("Ingrese el ID del Cliente a actualizar:");
-        Long id = scanner.nextLong();
-        scanner.nextLine();  // Consumir el salto de línea después de nextLong
+        System.out.print("Ingrese el ID del Cliente a actualizar: ");
+        Long id;
+        try {
+            id = Long.parseLong(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("ID inválido. Debe ser un número entero.");
+            return;
+        }
 
         Cliente cliente = clienteUseCase.obtenerClientePorId(id);
 
@@ -148,20 +169,26 @@ public class ClienteControlador {
                     cliente.getTipoDocumento().getTipo(), cliente.getDocumento());
 
             // Pedir nuevos datos del cliente
-            System.out.println("Ingrese el nuevo nombre del Cliente:");
-            String nuevoNombre = scanner.nextLine();
+            System.out.print("Ingrese el nuevo nombre del Cliente: ");
+            String nuevoNombre = scanner.nextLine().trim();
 
-            System.out.println("Ingrese la nueva edad del Cliente:");
-            int nuevaEdad = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea después de nextInt
+            System.out.print("Ingrese la nueva edad del Cliente: ");
+            int nuevaEdad;
+            try {
+                nuevaEdad = Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Edad inválida. Debe ser un número entero.");
+                return;
+            }
 
             List<TipoDocumento> tipoDocumentos = tipoDocumentoRepo.obtenerTodosLosTiposDocumento();
             System.out.println("Seleccione el nuevo tipo de Documento:");
             mostrarTipoDocumentos(tipoDocumentos);
             int opcionTipoDocumento = Consola.optionValidation("Ingrese la opción: ", 1, tipoDocumentos.size());
             TipoDocumento tipoDocumentoSeleccionado = tipoDocumentos.get(opcionTipoDocumento - 1);
-            System.out.println("Ingrese el nuevo documento:");
-            String nuevoDocumento = scanner.nextLine();
+
+            System.out.print("Ingrese el nuevo documento: ");
+            String nuevoDocumento = scanner.nextLine().trim();
 
             // Actualizar el cliente con los nuevos datos
             cliente.setNombre(nuevoNombre);
@@ -177,11 +204,16 @@ public class ClienteControlador {
         }
     }
 
-    public void eliminarCliente() {
+    private void eliminarCliente() {
         System.out.println("---- Eliminar Cliente ----");
-        System.out.println("Ingrese el ID del Cliente a eliminar:");
-        Long id = scanner.nextLong();
-        scanner.nextLine();  // Consumir el salto de línea después de nextLong
+        System.out.print("Ingrese el ID del Cliente a eliminar: ");
+        Long id;
+        try {
+            id = Long.parseLong(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("ID inválido. Debe ser un número entero.");
+            return;
+        }
 
         Cliente cliente = clienteUseCase.obtenerClientePorId(id);
 

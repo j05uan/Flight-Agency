@@ -100,7 +100,7 @@ public class Main {
             // aerpouerto
             AeropuertoServices aeropuertoServices = new AeropuertoRepository();
             AeropueroUseCase aeropuertoUseCase = new AeropueroUseCase(aeropuertoServices);
-            AeropuertoControlador aeropuertoControlador = new AeropuertoControlador(null, aeropuertoUseCase, null);
+            AeropuertoControlador aeropuertoControlador = new AeropuertoControlador(aeropuertoUseCase);
             //aerolinea
             AerolineaServices aerolineaServices = new AerolineaRepository();
             AerolineaUseCase aerolineaUseCase = new AerolineaUseCase(aerolineaServices);
@@ -108,7 +108,7 @@ public class Main {
             //Ciudad
             CiudadServices ciudadServices = new CiudadRepository();
             CiudadUseCase ciudadUseCase = new CiudadUseCase(ciudadServices);
-            CiudadControlador ciudadControlador = new CiudadControlador(ciudadUseCase, null, null);
+            CiudadControlador ciudadControlador = new CiudadControlador(ciudadUseCase);
             //Pais 
             PaisServices paisServices = new PaisRepository();
             PaisUseCase paisUseCase = new PaisUseCase(paisServices);
@@ -132,18 +132,18 @@ public class Main {
             //Fabricante
             FabricanteServices fabricanteServices = new FabricanteRepository();
             FabricanteUseCase fabricanteUseCase = new FabricanteUseCase(fabricanteServices);
-            FabricanteControlador fabricanteControlador = new FabricanteControlador(fabricanteUseCase, null);
+            FabricanteControlador fabricanteControlador = new FabricanteControlador(fabricanteUseCase);
 
             // Modelo 
             ModeloServices modeloServices = new ModeloRepository();
             ModeloUseCase modeloUseCase = new ModeloUseCase(modeloServices);
-            ModeloControlador modeloControlador = new ModeloControlador(modeloUseCase, null);
+            ModeloControlador modeloControlador = new ModeloControlador(modeloUseCase);
 
 
             //Avion
             AvionServices avionServices = new AvionRepository();
             AvionUseCase avionUseCase = new AvionUseCase(avionServices);
-            AvionControlador avioncControlador = new AvionControlador(null, null, null, null);
+            AvionControlador avioncControlador = new AvionControlador(null);
 
             //EstadoAvion
             EstadoAvionServices estadoAvionServices = new EstadoAvionRepository();
@@ -172,7 +172,7 @@ public class Main {
             //Salidas Aeropuerto
             SalidaAeropuertoServices salidaAeropuertoServices = new SalidaAeropuertoRepository();
             SalidaAeropuertoUseCase salidaAeropuertoUseCase = new SalidaAeropuertoUseCase(salidaAeropuertoServices);
-            SalidaAeropuertoControlador salidaAeropuertoControlador = new SalidaAeropuertoControlador(salidaAeropuertoUseCase, null, null);
+            SalidaAeropuertoControlador salidaAeropuertoControlador = new SalidaAeropuertoControlador(null);
 
             // Vuelos 
             RutaServices rutaServices = new RutaRepository();
@@ -302,7 +302,7 @@ public class Main {
                 switch (seleccion) {
                     case 1:
                         cleanScreen();
-                        aerolineaControlador.start();
+                        aerolineaControlador.run();
                         break;
                     case 2:
                         cleanScreen();
@@ -347,7 +347,8 @@ public class Main {
                 switch (seleccionLocalidad) {
                     case 1:
                         cleanScreen();
-                        paisControlador.start();
+                        paisControlador.run();
+                        
                         break;
                     case 2:
                         cleanScreen();

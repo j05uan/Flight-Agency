@@ -9,11 +9,12 @@ import java.util.Scanner;
 public class FabricanteControlador {
 
     private final FabricanteUseCase fabricanteUseCase;
-    private final Scanner scanner;
+    private final Scanner scanner = new Scanner(System.in);
 
-    public FabricanteControlador(FabricanteUseCase fabricanteUseCase, Scanner scanner) {
+    
+
+    public FabricanteControlador(FabricanteUseCase fabricanteUseCase) {
         this.fabricanteUseCase = fabricanteUseCase;
-        this.scanner = scanner;
     }
 
     public void start() {

@@ -1,12 +1,13 @@
 package tipoTarifa.infraestructure.in;
 
 import java.util.Scanner;
+import java.util.List;
 
 import tipoTarifa.Application.TipoTarifaUseCase;
 import tipoTarifa.Domain.entity.TipoTarifa;
 
 public class TipoTarifaControlador {
-     private final TipoTarifaUseCase tipoTarifaUseCase;
+    private final TipoTarifaUseCase tipoTarifaUseCase;
     private final Scanner scanner;
 
     public TipoTarifaControlador(TipoTarifaUseCase tipoTarifaUseCase) {
@@ -70,19 +71,21 @@ public class TipoTarifaControlador {
         System.out.println("--- Menú Crear Tipo de Tarifa ---");
         System.out.print("Ingrese el nombre del tipo de tarifa: ");
         String nombre = scanner.nextLine();
-        Long id = (long) (tipoTarifaUseCase.obtenerTodosLosTiposTarifa().size() + 1);  // Generador simple de ID
         TipoTarifa tipoTarifa = new TipoTarifa();
+        tipoTarifa.setTipo(nombre);
         tipoTarifaUseCase.crearTipoTarifa(tipoTarifa);
         System.out.println("Tipo de Tarifa creado con éxito.");
     }
 
     private void obtenerTodosLosTiposTarifa() {
         System.out.println("--- Menú Obtener Todos los Tipos de Tarifa ---");
-        var tiposTarifa = tipoTarifaUseCase.obtenerTodosLosTiposTarifa();
+        List<TipoTarifa> tiposTarifa = tipoTarifaUseCase.obtenerTodosLosTiposTarifa();
         if (tiposTarifa.isEmpty()) {
             System.out.println("No hay tipos de tarifa disponibles.");
         } else {
-            tiposTarifa.forEach(System.out::println);
+            for (TipoTarifa tipo : tiposTarifa) {
+                System.out.println(tipo);
+            }
         }
     }
 

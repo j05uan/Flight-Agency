@@ -44,5 +44,8 @@ public class Pais {
         this.ciudades = ciudades;
     }
 
+    public String toString() {
+        return String.format("ID: %d, Nombre: %s", id, nombre);
+    }
 
 }

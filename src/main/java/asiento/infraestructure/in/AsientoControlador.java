@@ -5,57 +5,23 @@ import java.util.Scanner;
 
 import asiento.Applicacion.AsientoUseCase;
 import asiento.Domain.Entity.Asiento;
-import avion.Domain.Entity.Avion;
-import avion.Infraestructure.out.AvionRepository;
 
 public class AsientoControlador {
     private final AsientoUseCase asientoUseCase;
     private final Scanner scanner = new Scanner(System.in);
-    private final AvionRepository avionRepository = new AvionRepository();
 
     public AsientoControlador(AsientoUseCase asientoUseCase) {
         this.asientoUseCase = asientoUseCase;
     }
 
-   
-
     public void crearAsiento() {
         System.out.println("---- Crear Asiento ----");
 
-
-        List<Avion> aviones = avionRepository.obtenerTodosLosAviones();
-        System.out.println("Seleccione el ID del avión: ");
-        
-        for(Avion avion : aviones){
-            System.out.println(avion.getMatricula()+"|"+avion.getCapacidad()+"|"+avion.getModelo());
-        }
-
-        System.out.println("Ingrese el ID del avion seleccionado");
-        Long avionId = Long.parseLong(scanner.nextLine());
-
-        Avion aavionSeleccionado = aviones.stream()
-            .filter(avion -> avion.getId().equals(avionId))
-            .findFirst()
-            .orElse(null);
-        if( aavionSeleccionado == null){
-            System.out.println("Avion no encontrado. :(");
-            return;
-        }
-        System.out.println("Ingrese la fila del asiento: ");
-        int fila = scanner.nextInt();
-
-        System.out.println("Ingrese la columna del asiento: ");
-        String columna = scanner.nextLine();
-
-        System.out.println("¿Está disponible el asiento? (true/false): ");
-        boolean disponible = Boolean.parseBoolean(scanner.nextLine());
+        System.out.println("Ingrese el nombre del asiento: ");
+        String nombre = scanner.nextLine();
 
         Asiento asiento = new Asiento();
-
-        asiento.setAvion(aavionSeleccionado);
-        asiento.setFila(fila);
-        asiento.setColumna(columna);
-        asiento.setDisponible(disponible);
+        asiento.setNombre(nombre);
 
         asientoUseCase.crearAsiento(asiento);
 
@@ -71,8 +37,8 @@ public class AsientoControlador {
             System.out.println("No hay asientos registrados.");
         } else {
             for (Asiento asiento : asientos) {
-                System.out.printf("ID: %d, Avión ID: %d, Fila: %s, Columna: %s, Disponible: %b%n",
-                        asiento.getId(), asiento.getAvion(), asiento.getFila(), asiento.getColumna(), asiento.isDisponible());
+                System.out.printf("ID: %d, Nombre: %s%n",
+                        asiento.getId(), asiento.getNombre());
             }
         }
     }
@@ -88,38 +54,11 @@ public class AsientoControlador {
         Asiento asientoExistente = asientoUseCase.obtenerAsientoPorId(id);
 
         if (asientoExistente != null) {
-            List<Avion> aviones = avionRepository.obtenerTodosLosAviones();
-            System.out.println("Seleccione el ID del avión: ");
-            
-            for(Avion avion : aviones){
-                System.out.println(avion.getMatricula()+"|"+avion.getCapacidad()+"|"+avion.getModelo());
-            }
 
-            System.out.println("Ingrese el ID del avion seleccionado");
-            Long avionId = Long.parseLong(scanner.nextLine());
+            System.out.println("Ingrese el nuevo nombre del asiento: ");
+            String nuevoNombre = scanner.nextLine();
 
-            Avion aavionSeleccionado = aviones.stream()
-                .filter(avion -> avion.getId().equals(avionId))
-                .findFirst()
-                .orElse(null);
-            if( aavionSeleccionado == null){
-                System.out.println("Avion no encontrado. :(");
-                return;
-            }
-
-            System.out.println("Ingrese la nueva fila del asiento: ");
-            int nuevaFila = scanner.nextInt();
-
-            System.out.println("Ingrese la nueva columna del asiento: ");
-            String nuevaColumna = scanner.nextLine();
-
-            System.out.println("¿Está disponible el asiento? (true/false): ");
-            boolean nuevoDisponible = Boolean.parseBoolean(scanner.nextLine());
-
-            asientoExistente.setAvion(aavionSeleccionado);
-            asientoExistente.setFila(nuevaFila);
-            asientoExistente.setColumna(nuevaColumna);
-            asientoExistente.setDisponible(nuevoDisponible);
+            asientoExistente.setNombre(nuevoNombre);
 
             asientoUseCase.actualizarAsiento(asientoExistente);
 
@@ -136,7 +75,6 @@ public class AsientoControlador {
         asientoUseCase.eliminarAsiento(id);
         System.out.println("Asiento eliminado con éxito.");
     }
-
 
     public void start() {
         boolean salir = false;
@@ -182,5 +120,4 @@ public class AsientoControlador {
     
         scanner.close();
     }
-    
 }

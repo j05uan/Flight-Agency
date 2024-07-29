@@ -13,11 +13,12 @@ public class ModeloControlador {
 
     private final Scanner scanner = new Scanner(System.in);
     private final ModeloUseCase modeloUseCase;
-    private final FabricanteRepository fabricanteRepo;
 
-    public ModeloControlador(ModeloUseCase modeloUseCase, FabricanteRepository fabricanteRepo) {
+
+   
+
+    public ModeloControlador(ModeloUseCase modeloUseCase) {
         this.modeloUseCase = modeloUseCase;
-        this.fabricanteRepo = fabricanteRepo;
     }
 
     public void start() {
@@ -74,7 +75,7 @@ public class ModeloControlador {
         String nombre = scanner.nextLine();
 
         // Mostrar fabricantes disponibles
-        List<Fabricante> fabricantes = fabricanteRepo.ObtenerTodosLosFabricantes();
+        List<Fabricante> fabricantes =new FabricanteRepository().ObtenerTodosLosFabricantes();
         mostrarFabricantes(fabricantes);
 
         // Pedir ID del fabricante
@@ -106,11 +107,11 @@ public class ModeloControlador {
         System.out.println("---- Listado de Modelos ----");
 
         List<Modelo> modelos = modeloUseCase.obtenerTodosLosModelos();
-
+        
         if (!modelos.isEmpty()) {
             for (Modelo modelo : modelos) {
                 System.out.printf("ID: %d, Nombre: %s, Fabricante: %s%n",
-                        modelo.getId(), modelo.getNombre(), modelo.getFabricante().getNombre());
+                        modelo.getId(), modelo.getNombre(), modelo.getFabricante().getId());
             }
         } else {
             System.out.println("No hay modelos registrados.");

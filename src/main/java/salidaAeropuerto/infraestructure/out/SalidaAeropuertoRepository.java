@@ -13,13 +13,13 @@ import resource.ConfiguracionBaseDeDatos;
 import salidaAeropuerto.Domain.entity.SalidaAeropuerto;
 import salidaAeropuerto.Domain.services.SalidaAeropuertoServices;
 
-public class SalidaAeropuertoRepository implements SalidaAeropuertoServices{
+public class SalidaAeropuertoRepository implements SalidaAeropuertoServices {
 
     @Override
     public void crearSalidaAeropuerto(SalidaAeropuerto aeropuertoSalida) {
-        String sql = "INSERT INTO salidas_aeropuerto (aeropuerto_id, salidaAeropuerto) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO salidas_aeropuerto (aeropuerto_id, salidaAeropuerto) VALUES (?, ?)";
         try (Connection connection = ConfiguracionBaseDeDatos.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             statement.setLong(1, aeropuertoSalida.getAeropuerto().getId());  
             statement.setString(2, aeropuertoSalida.getSalidaAeropuerto());  
@@ -45,8 +45,8 @@ public class SalidaAeropuertoRepository implements SalidaAeropuertoServices{
         String sql = "SELECT * FROM salidas_aeropuerto";
 
         try (Connection connection = ConfiguracionBaseDeDatos.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery()) {
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
                 SalidaAeropuerto salida = mapResultSetToSalidaAeropuerto(resultSet);
@@ -66,7 +66,7 @@ public class SalidaAeropuertoRepository implements SalidaAeropuertoServices{
         String sql = "SELECT * FROM salidas_aeropuerto WHERE id = ?";
 
         try (Connection connection = ConfiguracionBaseDeDatos.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -87,11 +87,11 @@ public class SalidaAeropuertoRepository implements SalidaAeropuertoServices{
         String sql = "UPDATE salidas_aeropuerto SET aeropuerto_id = ?, salidaAeropuerto = ? WHERE id = ?";
 
         try (Connection connection = ConfiguracionBaseDeDatos.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, salidaAeropuerto.getAeropuerto().getId());
-            statement.setString(4, salidaAeropuerto.getSalidaAeropuerto());
-            statement.setLong(5, salidaAeropuerto.getId());
+            statement.setString(2, salidaAeropuerto.getSalidaAeropuerto());
+            statement.setLong(3, salidaAeropuerto.getId());
 
             statement.executeUpdate();
 
@@ -105,7 +105,7 @@ public class SalidaAeropuertoRepository implements SalidaAeropuertoServices{
         String sql = "DELETE FROM salidas_aeropuerto WHERE id = ?";
 
         try (Connection connection = ConfiguracionBaseDeDatos.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, id);
             statement.executeUpdate();
@@ -121,7 +121,7 @@ public class SalidaAeropuertoRepository implements SalidaAeropuertoServices{
         salida.setId(resultSet.getLong("id"));
         Aeropuerto aeropuerto = new AeropuertoRepository().obtenerAeropuertoPorId(resultSet.getLong("aeropuerto_id"));
         salida.setAeropuerto(aeropuerto);
-        salida.setSalidaAeropuerto(resultSet.getString("salidaAeropuerto"));
+        salida.setSalidaAeropuerto(resultSet.getString("salidaAeropuerto")); // Asegúrate de que el nombre del campo sea correcto
         return salida;
     }
 }

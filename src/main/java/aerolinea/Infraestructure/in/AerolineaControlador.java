@@ -15,12 +15,16 @@ public class AerolineaControlador {
         this.aerolineaUseCase = aerolineaUseCase;
     }
 
-    public void start() {
+    public void run() {
+        start();
+    }
+
+    private void start() {
         boolean salirMenuAerolinea = false;
         while (!salirMenuAerolinea) {
             mostrarMenuAerolinea();
             try {
-                int seleccionAereolinea = Integer.parseInt(scanner.nextLine());
+                int seleccionAereolinea = Integer.parseInt(scanner.nextLine().trim());
                 switch (seleccionAereolinea) {
                     case 1:
                         cleanScreen();
@@ -52,16 +56,17 @@ public class AerolineaControlador {
                 System.out.println("Ha ocurrido un error: " + e.getMessage());
             }
         }
-        scanner.close(); 
+        // Consider removing scanner close here if you plan to use it elsewhere
+        // scanner.close(); 
     }
 
     private void mostrarMenuAerolinea() {
-        System.out.println("--- Menú Aerolinea ---");
+        System.out.println("--- Menú Aerolínea ---");
         System.out.println("Seleccione una opción:");
-        System.out.println("1. Crear Aerolinea");
-        System.out.println("2. Listar Aerolineas");
-        System.out.println("3. Actualizar Aerolinea");
-        System.out.println("4. Eliminar Aerolinea");
+        System.out.println("1. Crear Aerolínea");
+        System.out.println("2. Listar Aerolíneas");
+        System.out.println("3. Actualizar Aerolínea");
+        System.out.println("4. Eliminar Aerolínea");
         System.out.println("5. Volver");
     }
 
@@ -103,7 +108,6 @@ public class AerolineaControlador {
     private void actualizarAerolinea() {
         System.out.println("---- Actualizar Aerolínea ----");
 
-        
         listarAerolineas();
 
         System.out.print("Ingrese el ID de la Aerolínea que desea actualizar: ");
@@ -126,7 +130,6 @@ public class AerolineaControlador {
                 return;
             }
 
-            // Validar que el nuevo nombre no contenga caracteres no permitidos
             if (!nuevoNombre.matches("[a-zA-Z\\s]+")) {
                 System.out.println("El nombre de la aerolínea solo puede contener letras y espacios.");
                 return;
@@ -153,7 +156,6 @@ public class AerolineaControlador {
             return;
         }
 
-        // Verificar si la aerolínea existe antes de eliminar
         Aerolinea aerolineaExistente = aerolineaUseCase.obtenerAerolineaPorId(id);
         if (aerolineaExistente != null) {
             aerolineaUseCase.eliminarAerolinea(id);

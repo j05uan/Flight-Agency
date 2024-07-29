@@ -7,20 +7,13 @@ import avion.Domain.Entity.Avion;
 
 public class Asiento {
     private Long id;
-    private Avion avion;
-    private int fila;
-    private String columna;
-    private boolean disponible;
+    private String nombre;
     private Set<AsientosReserva> asientosReservas;
     public Asiento() {
     }
-    public Asiento(Long id, Avion avion, int fila, String columna, boolean disponible,
-            Set<AsientosReserva> asientosReservas) {
+    public Asiento(Long id, String nombre, Set<AsientosReserva> asientosReservas) {
         this.id = id;
-        this.avion = avion;
-        this.fila = fila;
-        this.columna = columna;
-        this.disponible = disponible;
+        this.nombre = nombre;
         this.asientosReservas = asientosReservas;
     }
     public Long getId() {
@@ -29,29 +22,11 @@ public class Asiento {
     public void setId(Long id) {
         this.id = id;
     }
-    public Avion getAvion() {
-        return avion;
+    public String getNombre() {
+        return nombre;
     }
-    public void setAvion(Avion avion) {
-        this.avion = avion;
-    }
-    public int getFila() {
-        return fila;
-    }
-    public void setFila(int fila) {
-        this.fila = fila;
-    }
-    public String getColumna() {
-        return columna;
-    }
-    public void setColumna(String columna) {
-        this.columna = columna;
-    }
-    public boolean isDisponible() {
-        return disponible;
-    }
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
     public Set<AsientosReserva> getAsientosReservas() {
         return asientosReservas;
@@ -59,6 +34,6 @@ public class Asiento {
     public void setAsientosReservas(Set<AsientosReserva> asientosReservas) {
         this.asientosReservas = asientosReservas;
     }
-
+    
     
 }

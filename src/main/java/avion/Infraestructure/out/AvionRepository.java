@@ -20,23 +20,25 @@ public class AvionRepository implements AvionServices {
 
     @Override
     public void CrearAvion(Avion avion) {
-        String sql = "INSERT INTO aviones (matricula, capacidad, fecha_fabricacion, aerolinea_id, modelo_id) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO aviones (matricula, capacidad, fecha_fabricacion, aerolinea_id, modelo_id, filas, columnas) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = ConfiguracionBaseDeDatos.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, avion.getMatricula());
-            statement.setInt(2, avion.getCapacidad());  // La capacidad es un entero
-            statement.setDate(3, new Date(avion.getFechaFabricacion().getTime()));  // Convertir java.util.Date a java.sql.Date
-            statement.setLong(4, avion.getAerolinea().getId());  // ID de Aerolinea
-            statement.setLong(5, avion.getModelo().getId());  // ID de Modelo
+            statement.setInt(2, avion.getCapacidad());  
+            statement.setDate(3, new Date(avion.getFechaFabricacion().getTime()));  
+            statement.setLong(4, avion.getAerolinea().getId());  
+            statement.setLong(5, avion.getModelo().getId());  
+            statement.setInt(6, avion.getFilas());  // Asignar número de filas
+            statement.setInt(7, avion.getColumnas());  // Asignar número de columnas
 
             int affectedRows = statement.executeUpdate();
 
             if (affectedRows > 0) {
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        avion.setId(generatedKeys.getLong(1));  // Establecer el ID generado
+                        avion.setId(generatedKeys.getLong(1));  
                     }
                 }
             }
@@ -46,14 +48,14 @@ public class AvionRepository implements AvionServices {
         }
     }
 
-
+    @Override
     public List<Avion> obtenerTodosLosAviones() {
         String sql = "SELECT * FROM aviones";
         List<Avion> aviones = new ArrayList<>();
 
         try (Connection connection = ConfiguracionBaseDeDatos.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery()) {
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
                 Avion avion = mapResultSetToAvion(resultSet);
@@ -67,19 +69,18 @@ public class AvionRepository implements AvionServices {
         return aviones;
     }
 
-    // Método para obtener aviones por matrícula
-    public Avion obtenerAvionesPorMatricula (String matricula) {
+    @Override
+    public Avion obtenerAvionesPorMatricula(String matricula) {
         String sql = "SELECT * FROM aviones WHERE matricula = ?";
-        List<Avion> aviones = new ArrayList<>();
+        Avion avion = null;
 
         try (Connection connection = ConfiguracionBaseDeDatos.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, matricula);
             try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    Avion avion = mapResultSetToAvion(resultSet);
-                    aviones.add(avion);
+                if (resultSet.next()) {
+                    avion = mapResultSetToAvion(resultSet);
                 }
             }
 
@@ -87,14 +88,16 @@ public class AvionRepository implements AvionServices {
             e.printStackTrace();
         }
 
-        return (Avion) aviones;
+        return avion;
     }
+
+    @Override
     public Avion obtenerAvionPorId(Long id) {
         String sql = "SELECT * FROM aviones WHERE id = ?";
         Avion avion = null;
 
         try (Connection connection = ConfiguracionBaseDeDatos.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -110,17 +113,21 @@ public class AvionRepository implements AvionServices {
         return avion;
     }
 
+    @Override
     public void actualizarAvion(Avion avion) {
-        String sql = "UPDATE aviones SET matricula = ?, capacidad = ?, fecha_fabricacion = ?, aerolinea_id = ?, modelo_id = ? WHERE id = ?";
+        String sql = "UPDATE aviones SET matricula = ?, capacidad = ?, fecha_fabricacion = ?, aerolinea_id = ?, modelo_id = ?, filas = ?, columnas = ? WHERE id = ?";
 
         try (Connection connection = ConfiguracionBaseDeDatos.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, avion.getMatricula());
             statement.setInt(2, avion.getCapacidad());  
             statement.setDate(3, new Date(avion.getFechaFabricacion().getTime()));
             statement.setLong(4, avion.getAerolinea().getId());  
             statement.setLong(5, avion.getModelo().getId());  
+            statement.setInt(6, avion.getFilas());  // Asignar número de filas
+            statement.setInt(7, avion.getColumnas());  // Asignar número de columnas
+            statement.setLong(8, avion.getId());  // Establecer el ID del avión para la actualización
 
             statement.executeUpdate();
 
@@ -129,11 +136,12 @@ public class AvionRepository implements AvionServices {
         }
     }
 
+    @Override
     public void eliminarAvion(Long id) {
         String sql = "DELETE FROM aviones WHERE id = ?";
 
         try (Connection connection = ConfiguracionBaseDeDatos.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, id);
             statement.executeUpdate();
@@ -143,28 +151,26 @@ public class AvionRepository implements AvionServices {
         }
     }
 
-    // Método para mapear el ResultSet a un objeto Avion
     private Avion mapResultSetToAvion(ResultSet resultSet) throws SQLException {
         Avion avion = new Avion();
         avion.setId(resultSet.getLong("id"));
         avion.setMatricula(resultSet.getString("matricula"));
         avion.setCapacidad(resultSet.getInt("capacidad"));
-        avion.setFechaFabricacion(resultSet.getDate("fecha_fabricacion"));  // Convertir java.sql.Date a java.util.Date
-        Aerolinea aerolinea = new AerolineaRepository().obtenerAerolineaPorId(resultSet.getLong("aerolinea_id"));
-        Modelo modelo = new ModeloRepository().obtenerModeloPorId(resultSet.getLong("modelo_id"));
+        avion.setFechaFabricacion(resultSet.getDate("fecha_fabricacion"));
+        avion.setFilas(resultSet.getInt("filas"));  // Leer número de filas
+        avion.setColumnas(resultSet.getInt("columnas"));  // Leer número de columnas
+
+        // Obtener Aerolinea y Modelo
+        AerolineaRepository aerolineaRepo = new AerolineaRepository();
+        ModeloRepository modeloRepo = new ModeloRepository();
+        Aerolinea aerolinea = aerolineaRepo.obtenerAerolineaPorId(resultSet.getLong("aerolinea_id"));
+        Modelo modelo = modeloRepo.obtenerModeloPorId(resultSet.getLong("modelo_id"));
+        
         avion.setAerolinea(aerolinea);
         avion.setModelo(modelo);
+
         return avion;
     }
-
-
- 
-
- 
-
-
- 
-
 
     
 }
