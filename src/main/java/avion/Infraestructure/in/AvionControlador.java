@@ -30,7 +30,7 @@ public class AvionControlador {
         do {
             mostrarMenu();
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Consume newline character
+            scanner.nextLine(); 
 
             switch (opcion) {
                 case 1:

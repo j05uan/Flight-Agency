@@ -12,11 +12,12 @@ import static utils.Consola.cleanScreen;
 public class PasajeroControlador {
     private final Scanner scanner = new Scanner(System.in);
     private final PasajeroUseCase pasajeroUseCase;
-    private final ClienteRepository clienteRepo;
+    
 
-    public PasajeroControlador(PasajeroUseCase pasajeroUseCase, ClienteRepository clienteRepo) {
+    
+
+    public PasajeroControlador(PasajeroUseCase pasajeroUseCase) {
         this.pasajeroUseCase = pasajeroUseCase;
-        this.clienteRepo = clienteRepo;
     }
 
     public void start() {
@@ -75,7 +76,7 @@ public class PasajeroControlador {
         Long clienteId = scanner.nextLong();
         scanner.nextLine(); // Consume newline character
 
-        Cliente cliente = clienteRepo.obtenerClientePorId(clienteId);
+        Cliente cliente = new ClienteRepository().obtenerClientePorId(clienteId);
         if (cliente == null) {
             System.out.println("Cliente no encontrado. Por favor, intente de nuevo.");
             return;
@@ -147,7 +148,7 @@ public class PasajeroControlador {
             Long nuevoClienteId = scanner.nextLong();
             scanner.nextLine(); // Consume newline character
 
-            Cliente nuevoCliente = clienteRepo.obtenerClientePorId(nuevoClienteId);
+            Cliente nuevoCliente = new ClienteRepository().obtenerClientePorId(nuevoClienteId);
             if (nuevoCliente != null) {
                 pasajero.setCliente(nuevoCliente);
             } else {

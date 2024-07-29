@@ -1,8 +1,7 @@
 package tipoTarifa.infraestructure.in;
 
-import java.util.Scanner;
 import java.util.List;
-
+import java.util.Scanner;
 import tipoTarifa.Application.TipoTarifaUseCase;
 import tipoTarifa.Domain.entity.TipoTarifa;
 
@@ -54,7 +53,7 @@ public class TipoTarifaControlador {
             }
         }
 
-        scanner.close();
+        scanner.close();  // Cierra el scanner cuando se termina la ejecución
     }
 
     private void mostrarMenu() {

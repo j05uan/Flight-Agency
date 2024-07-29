@@ -177,17 +177,17 @@ public class Main {
             // Vuelos 
             RutaServices rutaServices = new RutaRepository();
             RutaUseCase rutaUseCase = new RutaUseCase(rutaServices);
-            RutaControlador rutaControlador = new RutaControlador(null, rutaUseCase, null, null, null);
+            RutaControlador rutaControlador = new RutaControlador(null);
 
             //Escalas 
             RutaEscalaServices rutaEscalaServices = new RutaEscalaRepository();
             RutaEscalaUseCase rutaEscalaUseCase = new RutaEscalaUseCase(rutaEscalaServices);
-            RutaEscalaControlador rutaEscalaControlador = new RutaEscalaControlador(rutaEscalaUseCase, null, null, null, null, null, null);
+            RutaEscalaControlador rutaEscalaControlador = new RutaEscalaControlador(rutaEscalaUseCase);
 
             //Pasajero
             PasajeroServices pasajeroServices = new PasajeroRepository();
             PasajeroUseCase pasajeroUseCase = new PasajeroUseCase(pasajeroServices);
-            PasajeroControlador pasajeroControlador = new PasajeroControlador(pasajeroUseCase, null);
+            PasajeroControlador pasajeroControlador = new PasajeroControlador(pasajeroUseCase);
 
             //Tarifa
             TarifaServices tarifaServices = new TarifaRepository();
@@ -507,44 +507,47 @@ public class Main {
                         } catch (Exception e) {
                         }
                         break;
-                    case 4:
+                        case 4:
                         cleanScreen();
-                        System.out.println("Menu Vuelos");
-                        System.out.println("Seleccione una opcion");
+                        System.out.println("Menú Vuelos");
+                        System.out.println("Seleccione una opción:");
                         System.out.println("1. Escalas");
                         System.out.println("2. Vuelos");
-                        System.out.println("3. Tripulaccion de Vuelo");
+                        System.out.println("3. Tripulación de Vuelo");
                         System.out.println("4. Salir");
+                    
                         try {
-                            int opccion = Integer.parseInt(scanner.nextLine());
-                            switch (opccion) {
+                            int opcion = Integer.parseInt(scanner.nextLine());
+                            switch (opcion) {
                                 case 1:
                                     cleanScreen();
-                                    rutaEscalaControlador.start();
+                                    rutaEscalaControlador.start();  // Asegúrate de que `rutaEscalaControlador` esté inicializado
                                     break;
                                 case 2:
                                     cleanScreen();
-                                    rutaControlador.start();
+                                    rutaControlador.start();  // Asegúrate de que `rutaControlador` esté inicializado
                                     break;
                                 case 3:
                                     cleanScreen();
                                     
-
+                                    System.out.println("Funcionalidad de Tripulación de Vuelo no implementada aún.");
+                                    break;
+                                case 4:
+                                    System.out.println("Saliendo del menú de vuelos...");
                                     break;
                                 default:
-                                    throw new AssertionError();
+                                    System.out.println("Opción no válida. Por favor, elija una opción entre 1 y 4.");
                             }
-                            
+                        } catch (NumberFormatException e) {
+                            System.out.println("Entrada inválida. Por favor, ingrese un número entero.");
                         } catch (Exception e) {
+                            System.out.println("Ha ocurrido un error: " + e.getMessage());
                         }
-                        
-
                         break;
+                    
                     case 5:
                         cleanScreen();
                         pasajeroControlador.start();
-
-
                         break;
                     case 6:
                         cleanScreen();

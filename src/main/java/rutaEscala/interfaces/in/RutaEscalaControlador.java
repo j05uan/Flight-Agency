@@ -19,25 +19,12 @@ public class RutaEscalaControlador {
 
 
     private final RutaEscalaUseCase rutaEscalaUseCase;
-    private final Scanner scanner;
-    private final RutaEscalaRepository rutaEscalaRepo;
-    private final AeropuertoRepository aeropuertoRepo;
-    private final RutaRepository rutaRepository;
-    private final AvionRepository avionRepository;
-    private final SalidaAeropuertoRepository salidaAeropuertoRepo;
-
+    private final Scanner scanner = new Scanner(System.in);
+    
     
 
-    public RutaEscalaControlador(RutaEscalaUseCase rutaEscalaUseCase, Scanner scanner,
-            RutaEscalaRepository rutaEscalaRepo, AeropuertoRepository aeropuertoRepo, RutaRepository rutaRepository,
-            AvionRepository avionRepository, SalidaAeropuertoRepository salidaAeropuertoRepo) {
+    public RutaEscalaControlador(RutaEscalaUseCase rutaEscalaUseCase) {
         this.rutaEscalaUseCase = rutaEscalaUseCase;
-        this.scanner = scanner;
-        this.rutaEscalaRepo = rutaEscalaRepo;
-        this.aeropuertoRepo = aeropuertoRepo;
-        this.rutaRepository = rutaRepository;
-        this.avionRepository = avionRepository;
-        this.salidaAeropuertoRepo = salidaAeropuertoRepo;
     }
 
     public void start(){
@@ -80,11 +67,11 @@ public class RutaEscalaControlador {
     private void mostrarMenu() {
         System.out.println("---- Menu de Opciones ----");
         System.out.println("1. Crear Escala");
-        System.out.println("1. Listar Todos los Escalas");
-        System.out.println("2. Buscar Escala por ID");
-        System.out.println("3. Actualizar Escala");
-        System.out.println("4. Eliminar Escala");
-        System.out.println(". Salir");
+        System.out.println("2. Listar Todos los Escalas");
+        System.out.println("3. Buscar Escala por ID");
+        System.out.println("4. Actualizar Escala");
+        System.out.println("5. Eliminar Escala");
+        System.out.println("6. Salir");
         System.out.println("Seleccione una opción:");
     }
 
@@ -92,7 +79,7 @@ public class RutaEscalaControlador {
 
         System.out.println("--Menu Crear Escala---");
         
-        List<Aeropuerto> aeropuertos = aeropuertoRepo.obtenerTodosLosAeropuertos();
+        List<Aeropuerto> aeropuertos = new AeropuertoRepository().obtenerTodosLosAeropuertos();
         System.out.println("Seleccione el aeropuerto Origen:");
         mostrarAeropuerto(aeropuertos);
         int opcionAeropuertoOrigen = Consola.optionValidation("Ingrese el id del aeropuerto Origen", 1, aeropuertos.size());
@@ -103,13 +90,13 @@ public class RutaEscalaControlador {
         int opcionAeropuertoDestino = Consola.optionValidation("Ingrese el id del aeropuerto Destino", 1, aeropuertos.size());
         Aeropuerto aeropuertoSeleccionadoDestino = aeropuertos.get(opcionAeropuertoDestino - 1);
         
-        List<Avion> aviones = avionRepository.obtenerTodosLosAviones();
+        List<Avion> aviones = new AvionRepository().obtenerTodosLosAviones();
         System.out.println("Seleccione el avion");
         mostrarAviones(aviones);
         int opciónAvion = Consola.optionValidation("Ingrese el id del Avion ", 1, aviones.size());
         Avion avionSeleccionado = aviones.get(opciónAvion -1);
 
-        List<SalidaAeropuerto> salidaAeropuertos = salidaAeropuertoRepo.obtenerTodosAeropuertoSalidas();
+        List<SalidaAeropuerto> salidaAeropuertos = new SalidaAeropuertoRepository().obtenerTodosAeropuertoSalidas();
         System.out.println("Seleccione la Salida:");
         mostrarSalidasAeropuerto(salidaAeropuertos);
         int opcionSalidaAeropuerto = Consola.optionValidation("Ingrese el id de la Salida Seleccionada", 1, salidaAeropuertos.size());
@@ -133,7 +120,7 @@ public class RutaEscalaControlador {
     }
 
     public void obtenerTodosLosEscalas() {
-        List<RutaEscala> escalas = rutaEscalaRepo.obtenerTodasRutaEscalas();
+        List<RutaEscala> escalas = rutaEscalaUseCase.obtenerTodasRutaEscalas();
         if (escalas.isEmpty()) {
             System.out.println("No se encontraron escalas.");
         } else {
@@ -148,7 +135,7 @@ public class RutaEscalaControlador {
         System.out.println("Ingrese el ID de la escala:");
         long id = scanner.nextInt();
         scanner.nextLine();  // Consumir el salto de línea
-        RutaEscala escala = rutaEscalaRepo.obtenerEscalaPorId(id);
+        RutaEscala escala = rutaEscalaUseCase.obtenerEscalaPorId(id);
         if (escala != null) {
             System.out.println(escala);  // Asumiendo que has implementado el método toString en RutaEscala
         } else {
@@ -162,13 +149,13 @@ public class RutaEscalaControlador {
         long id = scanner.nextInt();
         scanner.nextLine();  // Consumir el salto de línea
         
-        RutaEscala escala = rutaEscalaRepo.obtenerEscalaPorId(id);
+        RutaEscala escala = rutaEscalaUseCase.obtenerEscalaPorId(id);
         if (escala == null) {
             System.out.println("No se encontró ninguna escala con el ID proporcionado.");
             return;
         }
         
-        List<Aeropuerto> aeropuertos = aeropuertoRepo.obtenerTodosLosAeropuertos();
+        List<Aeropuerto> aeropuertos = new AeropuertoRepository().obtenerTodosLosAeropuertos();
         System.out.println("Seleccione el aeropuerto Origen:");
         mostrarAeropuerto(aeropuertos);
         int opcionAeropuertoOrigen = Consola.optionValidation("Ingrese el id del aeropuerto Origen", 1, aeropuertos.size());
@@ -179,13 +166,13 @@ public class RutaEscalaControlador {
         int opcionAeropuertoDestino = Consola.optionValidation("Ingrese el id del aeropuerto Destino", 1, aeropuertos.size());
         Aeropuerto aeropuertoSeleccionadoDestino = aeropuertos.get(opcionAeropuertoDestino - 1);
         
-        List<Avion> aviones = avionRepository.obtenerTodosLosAviones();
+        List<Avion> aviones = new AvionRepository().obtenerTodosLosAviones();
         System.out.println("Seleccione el avion");
         mostrarAviones(aviones);
         int opciónAvion = Consola.optionValidation("Ingrese el id del Avion ", 1, aviones.size());
         Avion avionSeleccionado = aviones.get(opciónAvion -1);
 
-        List<SalidaAeropuerto> salidaAeropuertos = salidaAeropuertoRepo.obtenerTodosAeropuertoSalidas();
+        List<SalidaAeropuerto> salidaAeropuertos = new SalidaAeropuertoRepository().obtenerTodosAeropuertoSalidas();
         System.out.println("Seleccione la Salida:");
         mostrarSalidasAeropuerto(salidaAeropuertos);
         int opcionSalidaAeropuerto = Consola.optionValidation("Ingrese el id de la Salida Seleccionada", 1, salidaAeropuertos.size());
@@ -204,7 +191,7 @@ public class RutaEscalaControlador {
         newescala.setHoraLlegada(llegada);
         newescala.setHoraSalida(Salida);
         newescala.setSalidaAeropuerto(salidaAeropuertoSeleccionada);
-        rutaEscalaRepo.actualizarEscala(newescala);
+        rutaEscalaUseCase.actualizarEscala(newescala);
         System.out.println("Escala actualizada correctamente.");
     }
     
@@ -214,7 +201,7 @@ public class RutaEscalaControlador {
         long id = scanner.nextInt();
         scanner.nextLine();  // Consumir el salto de línea
         
-        RutaEscala escala = rutaEscalaRepo.obtenerEscalaPorId(id);
+        RutaEscala escala = rutaEscalaUseCase.obtenerEscalaPorId(id);
         if (escala == null) {
             System.out.println("No se encontró ninguna escala con el ID proporcionado.");
             return;
@@ -226,7 +213,7 @@ public class RutaEscalaControlador {
         
         if (confirmacion.equals("S")) {
             // Eliminar en el repositorio
-            rutaEscalaRepo.eliminarEscala(id);
+            rutaEscalaUseCase.eliminarEscala(id);
             System.out.println("Escala eliminada correctamente.");
         } else {
             System.out.println("Eliminación cancelada.");
